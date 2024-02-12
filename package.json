@@ -1,0 +1,14 @@
+{
+  "name": "rick-morty-app",
+  "version": "1.0.0",
+  "description": "Aplicación Rick y Morty para Heroku.",
+  "main": "rick_morty.js",
+  "scripts": {
+    "start": "node rick_morty.js"
+  },
+  "engines": {
+    "node": "20.x"
+  },
+  "author": "jhoan beltran",
+  "license": "MIT"
+}
