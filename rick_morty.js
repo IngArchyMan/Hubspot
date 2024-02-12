@@ -26,7 +26,44 @@ async function upsertContact(email, properties) {
     });
 
     let contactId = searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
+	  if (contactId) {
+        await hubspotClient.crm.contacts.basicApi.update(contactId, { properties });
+    } else {
+        const createResponse = await hubspotClient.crm.contacts.basicApi.create({ properties: { email, ...properties } });
+        contactId = createResponse.id;
+																				   
+    }
+   
 
+    return contactId;
+															
+}
+
+// Función para crear/actualizar empresas y devolver el ID de la empresa
+async function upsertCompany(name, properties) {
+    const searchResponse = await hubspotClient.crm.companies.searchApi.doSearch({
+        filterGroups: [{
+            filters: [{
+                propertyName: 'name',
+                operator: 'EQ',
+                value: name
+            }]
+        }],
+        properties: ['name']
+    });
+
+    let companyId = searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
+
+    if (companyId) {
+        await hubspotClient.crm.companies.basicApi.update(companyId, { properties });
+    } else {
+        const createResponse = await hubspotClient.crm.companies.basicApi.create({ properties: { name, ...properties } });
+        companyId = createResponse.id;
+    }
+   
+
+    return companyId;
+}
 // Endpoint para crear o actualizar un contacto
 app.post('/create-or-update-contact', async (req, res) => {
     const { email, contactProperties } = req.body;
