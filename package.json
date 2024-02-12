@@ -12,8 +12,8 @@
   "author": "jhoan beltran",
   "license": "MIT",
   "dependencies": {
+    "@hubspot/api-client": "^5.0.0",
     "dotenv": "^16.0.0",
-    "express": "^4.17.1",
-    "@hubspot/api-client": "^5.0.0"
+    "express": "^4.17.1"
   }
 }
