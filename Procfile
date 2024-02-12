@@ -1,0 +1,1 @@
+web: node rick_morty.js
