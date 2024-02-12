@@ -6,6 +6,11 @@ const hubspot = require('@hubspot/api-client');
 const app = express();
 app.use(bodyParser.json());
 
+// Agrega esta sección para manejar solicitudes GET a la raíz "/"
+app.get('/', (req, res) => {
+  res.send('Bienvenido a la API de Rick y Morty en HubSpot');
+});
+
 const hubspotClient = new hubspot.Client({ accessToken: process.env.HUBSPOT_ACCESS_TOKEN });
 
 // Función para crear/actualizar contactos y devolver el ID del contacto
