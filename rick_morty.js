@@ -78,7 +78,7 @@ app.post('/create-or-update-contact', async (req, res) => {
 });
 
 // Endpoint para crear o actualizar una ubicación (company)
-app.post('/create-or-update-location', async (req, res) => {
+app.post('/create-or-update-company', async (req, res) => {
     const { name, companyProperties } = req.body;
 
     try {
