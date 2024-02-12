@@ -10,5 +10,8 @@
     "node": "20.x"
   },
   "author": "jhoan beltran",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.0.0"
+  }
 }
