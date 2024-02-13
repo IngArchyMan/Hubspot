@@ -38,20 +38,20 @@ async function migrateCharactersAndLocations() {
                     lastname: character.name.split(' ').slice(1).join(' ') || character.name,
                     // Otros mapeos según sea necesario
                 };
-
-
-
+				console.log("contactProperties.email:", contactProperties.email);
+				console.log("contactProperties:", contactProperties)
+				// Crear o actualizar el contacto en HubSpot
+				const contactId = await upsertContact(contactProperties.email, contactProperties);
                 // Obtener y migrar la ubicación asociada al personaje
                 const locationUrl = character.location.url
-				 console.log(`locationUrl ${locationUrl}`);
+				console.log("locationUrl:", locationUrl);
                 if (locationUrl) {
                     const locationResponse = await axios.get(locationUrl);
                     const location = locationResponse.data;
-					console.log(`locationResponse ${locationResponse}`);
-					console.log(`location ${location}`);
+					console.log("locationResponse",locationResponse);
+					console.log("location" ,location);
 					
-					// Crear o actualizar el contacto en HubSpot
-					const contactId = await upsertContact(contactProperties.email, contactProperties);
+
                     // Mapear datos de la ubicación a propiedades de empresa en HubSpot
                     const companyProperties = {
                         name: location.name,
