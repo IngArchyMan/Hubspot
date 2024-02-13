@@ -89,7 +89,7 @@ async function upsertContact(characterId, properties) {
         value: (characterId || '').toString() // Convierte el ID a string para la comparación
       }]
     }],
-    properties: ['character_id']
+    properties: ['name']
   });
   console.log("searchResponse:",searchResponse);
   // Verifica si se encontró algún resultado y obtiene el ID del contacto
@@ -121,12 +121,12 @@ async function upsertCompany(properties) {
     const searchResponse = await hubspotClient.crm.companies.searchApi.doSearch({
         filterGroups: [{
             filters: [{
-                propertyName: 'name', // Utilizar location_id como propiedad para la búsqueda
+                propertyName: 'COMPANY NAME', // Utilizar location_id como propiedad para la búsqueda
                 operator: 'EQ',
                 value: properties.name
             }]
         }],
-        properties: ['location_id']
+        properties: ['COMPANY NAME']
     });
 
     if (searchResponse.results && searchResponse.results.length > 0) {
