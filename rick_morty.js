@@ -33,14 +33,15 @@ async function migrateCharactersAndLocations() {
             if (isPrime(character.id) || character.id === 1) { // Incluir a Rick Sanchez con ID 1
                 // Mapear datos del personaje a propiedades de contacto en HubSpot
                 const contactProperties = {
-                    email: `${character.name.toLowerCase().split(' ').join('.')}@rickandmorty.com`,
                     firstname: character.name.split(' ')[0],
                     lastname: character.name.split(' ').slice(1).join(' ') || character.name,
+					status_character:character.status,
+					character_species:character.species,
+					character_gender:character.gender,
                 };
-				console.log("contactProperties.email:", contactProperties.email);
 				console.log("contactProperties:", contactProperties)
 				// Crear o actualizar el contacto en HubSpot
-				const contactId = await upsertContact(contactProperties.email, contactProperties);
+				const contactId = await upsertContact(contactProperties);
                 // Obtener y migrar la ubicación asociada al personaje
                 const locationUrl = character.location.url
 				console.log("locationUrl:", locationUrl);
@@ -68,23 +69,8 @@ async function migrateCharactersAndLocations() {
         console.error('Error al migrar personajes y ubicaciones:', error);
     }
 }
-async function upsertContact(email, properties) {
-  // Verificar que el email no sea undefined o un string vacío
-  if (!email) {
-    console.error('El email proporcionado es inválido:', email);
-    return; // Salir de la función si el email no es válido
-  }
-
-  const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({
-    filterGroups: [{
-      filters: [{
-        propertyName: 'email',
-        operator: 'EQ',
-        value: email
-      }]
-    }],
-    properties: ['email']
-  });
+async function upsertContact(properties) {
+ 
 
   let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
 
