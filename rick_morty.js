@@ -6,7 +6,7 @@ const axios = require('axios');
 
 const app = express();
 app.use(bodyParser.json());
-
+let contactProperties,companyProperties;
 
 app.get('/', (req, res) => {
   res.send('Bienvenido a la API de Rick y Morty en HubSpot');
@@ -154,7 +154,7 @@ app.post('/create-or-update-contact', async (req, res) => {
 
 // Endpoint para crear o actualizar una ubicación (company)
 app.post('/create-or-update-company', async (req, res) => {
-    const { name, companyProperties } = req.body;
+    const { companyProperties } = req.body;
 
     try {
         const companyId = await upsertCompany(companyProperties);
@@ -174,7 +174,7 @@ async function associateContactWithCompany(contactId, companyId) {
 
 // Endpoint para actualizar contactos y asociarlos con empresas
 app.post('/update-contact', async (req, res) => {
-    const { email, contactProperties, companyName, companyProperties } = req.body;
+    const { character.id, contactProperties, companyProperties } = req.body;
 
     try {
         const contactId = await upsertContact(character.id,contactProperties);
