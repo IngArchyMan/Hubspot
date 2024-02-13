@@ -60,7 +60,7 @@ async function migrateCharactersAndLocations() {
 						dimension:location.dimension,
 						creation_date:location.created
                     };
-
+					console.log("contactProperties:", companyProperties)
                     // Crear o actualizar la empresa en HubSpot
                     const companyId = await upsertCompany(location.id, companyProperties);
 
@@ -102,7 +102,7 @@ async function upsertContact(characterId, properties) {
    
 
 
-async function upsertContact(properties) {
+async function upsertCompany(properties) {
     // Verificar si el location_id está presente y es válido
     if (!properties.location_id) {
         console.error('El location_id proporcionado es inválido.');
