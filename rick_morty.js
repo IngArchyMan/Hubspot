@@ -61,7 +61,7 @@ async function migrateCharactersAndLocations() {
 						dimension:location.dimension,
 						creation_date:location.created
                     };
-					console.log("contactProperties:", companyProperties);
+					console.log("companyProperties:", companyProperties);
                     // Crear o actualizar la empresa en HubSpot
                     const companyId = await upsertCompany(companyProperties);
 
@@ -144,7 +144,7 @@ app.post('/create-or-update-contact', async (req, res) => {
     const { email, contactProperties } = req.body;
 
     try {
-        const contactId = await upsertContact(email, contactProperties);
+        const contactId = await upsertContact(character.id,contactProperties);
         res.json({ success: true, message: 'Contact updated successfully', contactId });
     } catch (error) {
         console.error('Error in create-or-update-contact endpoint:', error);
@@ -157,7 +157,7 @@ app.post('/create-or-update-company', async (req, res) => {
     const { name, companyProperties } = req.body;
 
     try {
-        const companyId = await upsertCompany(name, companyProperties);
+        const companyId = await upsertCompany(companyProperties);
         res.json({ success: true, message: 'Location updated successfully', companyId });
     } catch (error) {
         console.error('Error in create-or-update-location endpoint:', error);
@@ -177,8 +177,8 @@ app.post('/update-contact', async (req, res) => {
     const { email, contactProperties, companyName, companyProperties } = req.body;
 
     try {
-        const contactId = await upsertContact(email, contactProperties);
-        const companyId = await upsertCompany(companyName, companyProperties);
+        const contactId = await upsertContact(character.id,contactProperties);
+        const companyId = await upsertCompany(companyProperties);
         await associateContactWithCompany(contactId, companyId);
 
         res.json({ success: true, message: 'Contact and company updated and associated successfully' });
