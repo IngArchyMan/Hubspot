@@ -174,7 +174,7 @@ async function associateContactWithCompany(contactId, companyId) {
 
 // Endpoint para actualizar contactos y asociarlos con empresas
 app.post('/update-contact', async (req, res) => {
-    const { character.id, contactProperties, companyProperties } = req.body;
+    const {characterId,contactProperties,companyProperties} = req.body;
 
     try {
         const contactId = await upsertContact(character.id,contactProperties);
