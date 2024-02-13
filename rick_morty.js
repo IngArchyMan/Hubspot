@@ -46,7 +46,7 @@ async function migrateCharactersAndLocations() {
 				};
 				console.log("contactProperties:", contactProperties);
 				// Crear o actualizar el contacto en HubSpot
-				const contactId = await upsertContact(character.name,contactProperties);
+				//const contactId = await upsertContact(character.name,contactProperties);
                 // Obtener y migrar la ubicación asociada al personaje
                 const locationUrl = character.location.url;
 				console.log("locationUrl:", locationUrl);
