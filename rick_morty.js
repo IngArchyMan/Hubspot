@@ -33,6 +33,17 @@ async function migrateCharactersAndLocations() {
             if (isPrime(character.id) || character.id === 1) { // Incluir a Rick Sanchez con ID 1
                 // Mapear datos del personaje a propiedades de contacto en HubSpot
                 const contactProperties = {
+					character_id: character.id,
+                    firstname: character.name.split(' ')[0],
+                    lastname: character.name.split(' ').slice(1).join(' ') || character.name,
+					status_character:character.status,
+					character_species:character.species,
+					character_gender:character.gender
+                };
+				else { // Incluir a Rick Sanchez con ID 1
+                // Mapear datos del personaje a propiedades de contacto en HubSpot
+                const contactProperties = {
+					character_id: character.id,
                     firstname: character.name.split(' ')[0],
                     lastname: character.name.split(' ').slice(1).join(' ') || character.name,
 					status_character:character.status,
@@ -111,7 +122,7 @@ async function upsertCompany(properties) {
 
     let contactId = null;
     // Realizar la búsqueda del contacto en HubSpot usando el location_id
-    const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({
+    const searchResponse = await hubspotClient.crm.companies.searchApi.doSearch({
         filterGroups: [{
             filters: [{
                 propertyName: 'location_id', // Utilizar location_id como propiedad para la búsqueda
@@ -124,9 +135,9 @@ async function upsertCompany(properties) {
 
     if (searchResponse.results && searchResponse.results.length > 0) {
         contactId = searchResponse.results[0].id;
-        await hubspotClient.crm.contacts.basicApi.update(contactId, { properties });
+        await hubspotClient.crm.companies.basicApi.update(contactId, { properties });
     } else {
-        const createResponse = await hubspotClient.crm.contacts.basicApi.create({ properties });
+        const createResponse = await hubspotClient.crm.companies.basicApi.create({ properties });
         contactId = createResponse.id;
     }
 
