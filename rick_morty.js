@@ -71,7 +71,7 @@ async function upsertContact(email, properties) {
 	console.log('upsertContact');
  if (typeof email !== 'string' || !email.trim()) {
     console.error('El email proporcionado es inválido:', email);
-    return; // Detiene la ejecución de la función si el email no es válido
+    return; 
   }
 
   const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({
