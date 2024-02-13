@@ -59,8 +59,6 @@ async function migrateCharactersAndLocations() {
                 if (locationUrl) {
                     const locationResponse = await axios.get(locationUrl);
                     const location = locationResponse.data;
-					console.log("locationResponse",locationResponse);
-					console.log("location" ,location);
 					
 
                     // Mapear datos de la ubicación a propiedades de empresa en HubSpot
@@ -86,6 +84,7 @@ async function migrateCharactersAndLocations() {
 }
 async function upsertContact(characterId, properties) {
   // Realiza la búsqueda basada en el ID del personaje para verificar si ya existe
+  console.log("characterId:", characterId)
   const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({
     filterGroups: [{
       filters: [{
