@@ -30,7 +30,7 @@ async function migrateCharactersAndLocations() {
 
         // Filtrar personajes con ID primo y migrarlos a HubSpot
         for (const character of characters) {
-            if (isPrime(character.id) || character.id === 1) { // Incluir a Rick Sanchez con ID 1
+            if (isPrime(character.id) && character.id === 1) { // Incluir a Rick Sanchez con ID 1
                 // Mapear datos del personaje a propiedades de contacto en HubSpot
                 const contactProperties = {
 					character_id: character.id,
@@ -39,8 +39,8 @@ async function migrateCharactersAndLocations() {
 					status_character:character.status,
 					character_species:character.species,
 					character_gender:character.gender
-                };
-				else { // Incluir a Rick Sanchez con ID 1
+                }
+				else if (isPrime(character.id)) { // Incluir a Rick Sanchez con ID 1
                 // Mapear datos del personaje a propiedades de contacto en HubSpot
                 const contactProperties = {
 					character_id: character.id,
