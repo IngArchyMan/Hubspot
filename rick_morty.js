@@ -91,9 +91,6 @@ async function upsertContact(email, properties) {
 }
    
 
-    return contactId;
-															
-}
 
 // Función para crear/actualizar empresas y devolver el ID de la empresa
 async function upsertCompany(name, properties) {
