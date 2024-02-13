@@ -151,7 +151,7 @@ migrateCharactersAndLocations().then(() => {
 
 // Endpoint para crear o actualizar un contacto
 app.post('/create-or-update-contact', async (req, res) => {
-    const { email, contactProperties } = req.body;
+    const { characterId, contactProperties } = req.body;
 
     try {
         const contactId = await upsertContact(characterId,contactProperties);
