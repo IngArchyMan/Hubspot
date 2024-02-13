@@ -92,9 +92,9 @@ async function upsertContact(characterId, properties) {
 
   // Si se encuentra el contacto, lo actualiza; si no, crea uno nuevo
   if (contactId) {
-    await hubspotClient.crm.contacts.basicApi.update(contactId, { properties });
+    await hubspotClient.crm.contacts.basicApi.update(contactId, properties);
   } else {
-    const createResponse = await hubspotClient.crm.contacts.basicApi.create({ properties: { ...properties, character_id: characterId } });
+    const createResponse = await hubspotClient.crm.contacts.basicApi.create({ properties: properties });
     contactId = createResponse.id;
   }
 
@@ -125,7 +125,7 @@ async function upsertCompany(properties) {
 
     if (searchResponse.results && searchResponse.results.length > 0) {
         contactId = searchResponse.results[0].id;
-        await hubspotClient.crm.companies.basicApi.update(contactId, { properties });
+        await hubspotClient.crm.companies.basicApi.update(contactId,  properties);
     } else {
         const createResponse = await hubspotClient.crm.companies.basicApi.create({ properties: { ...properties, location_id: properties.location_id} });
         contactId = createResponse.id;
