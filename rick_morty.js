@@ -77,7 +77,7 @@ async function migrateCharactersAndLocations() {
 }
 
 async function upsertContact(characterId, properties) {
-  
+  console.log("upsertContact:")
   console.log("characterId:", characterId)
   console.log("properties:", properties);
   const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({
@@ -90,7 +90,7 @@ async function upsertContact(characterId, properties) {
     }],
     properties: ['character_id']
   });
-
+  console.log("searchResponse:",searchResponse);
   // Verifica si se encontró algún resultado y obtiene el ID del contacto
   let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
 
