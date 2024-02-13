@@ -38,8 +38,8 @@ async function migrateCharactersAndLocations() {
                     lastname: character.name.split(' ').slice(1).join(' ') || character.name,
 					status_character:character.status,
 					character_species:character.species,
-					character_gender:character.gender
-			}}
+					character_gender:character.gender};
+					}
 				else if (isPrime(character.id)) { // Incluir a Rick Sanchez con ID 1
                 // Mapear datos del personaje a propiedades de contacto en HubSpot
                 const contactProperties = {
@@ -48,13 +48,13 @@ async function migrateCharactersAndLocations() {
                     lastname: character.name.split(' ').slice(1).join(' ') || character.name,
 					status_character:character.status,
 					character_species:character.species,
-					character_gender:character.gender
-                }};
-				console.log("contactProperties:", contactProperties)
+					character_gender:character.gender};
+					};
+				console.log("contactProperties:", contactProperties);
 				// Crear o actualizar el contacto en HubSpot
 				const contactId = await upsertContact(character.id,contactProperties);
                 // Obtener y migrar la ubicación asociada al personaje
-                const locationUrl = character.location.url
+                const locationUrl = character.location.url;
 				console.log("locationUrl:", locationUrl);
                 if (locationUrl) {
                     const locationResponse = await axios.get(locationUrl);
@@ -71,7 +71,7 @@ async function migrateCharactersAndLocations() {
 						dimension:location.dimension,
 						creation_date:location.created
                     };
-					console.log("contactProperties:", companyProperties)
+					console.log("contactProperties:", companyProperties);
                     // Crear o actualizar la empresa en HubSpot
                     const companyId = await upsertCompany(companyProperties);
 
