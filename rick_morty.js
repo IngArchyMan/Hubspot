@@ -43,10 +43,12 @@ async function migrateCharactersAndLocations() {
 
                 // Obtener y migrar la ubicación asociada al personaje
                 const locationUrl = character.location.url;
+				 console.error('locationUrl', locationUrl);
                 if (locationUrl) {
                     const locationResponse = await axios.get(locationUrl);
                     const location = locationResponse.data;
-
+					console.error('locationResponse', locationResponse);
+					console.error('location', location);
                     // Mapear datos de la ubicación a propiedades de empresa en HubSpot
                     const companyProperties = {
                         name: location.name,
