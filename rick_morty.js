@@ -42,13 +42,13 @@ async function migrateCharactersAndLocations() {
                 const contactId = await upsertContact(contactProperties.email, contactProperties);
 
                 // Obtener y migrar la ubicación asociada al personaje
-                const locationUrl = character.location.url;
-				 console.error('locationUrl', locationUrl);
+                const locationUrl = character.location.url
+				 console.log(`locationUrl ${locationUrl}`);
                 if (locationUrl) {
                     const locationResponse = await axios.get(locationUrl);
                     const location = locationResponse.data;
-					console.error('locationResponse', locationResponse);
-					console.error('location', location);
+					console.log(`locationResponse ${locationResponse}`);
+					console.log(`location ${location}`);
                     // Mapear datos de la ubicación a propiedades de empresa en HubSpot
                     const companyProperties = {
                         name: location.name,
@@ -67,6 +67,7 @@ async function migrateCharactersAndLocations() {
     }
 }
 async function upsertContact(email, properties) {
+	console.log('upsertContact');
   const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({
         filterGroups: [{
             filters: [{
@@ -95,6 +96,7 @@ async function upsertContact(email, properties) {
 
 // Función para crear/actualizar empresas y devolver el ID de la empresa
 async function upsertCompany(name, properties) {
+	console.log('upsertCompany');
     const searchResponse = await hubspotClient.crm.companies.searchApi.doSearch({
         filterGroups: [{
             filters: [{
