@@ -66,12 +66,12 @@ async function migrateCharactersAndLocations() {
     }
 }
 async function upsertContact(email, properties) {
-    const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({
+  const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({
         filterGroups: [{
             filters: [{
-                propertyName: 'EMAIL',
+                propertyName: 'email',
                 operator: 'EQ',
-                value: email
+                value: email // Asegúrate de que 'email' tenga un valor no nulo o indefinido aquí
             }]
         }],
         properties: ['email']
