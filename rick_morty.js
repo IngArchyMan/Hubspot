@@ -86,6 +86,7 @@ async function migrateCharactersAndLocations() {
 async function upsertContact(characterId, properties) {
   // Realiza la búsqueda basada en el ID del personaje para verificar si ya existe
   console.log("characterId:", characterId)
+  console.log("properties:", properties);
   const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({
     filterGroups: [{
       filters: [{
@@ -114,6 +115,7 @@ async function upsertContact(characterId, properties) {
 
 
 async function upsertCompany(properties) {
+    console.log("properties:", properties);
     // Verificar si el location_id está presente y es válido
     if (!properties.location_id) {
         console.error('El location_id proporcionado es inválido.');
