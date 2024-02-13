@@ -41,7 +41,7 @@ async function migrateCharactersAndLocations() {
 					character_species:character.species,
 					character_gender:character.gender};
 				}
-                else{
+                else if(isPrime(character.id)){
                     const contactProperties = {
                         character_id: character.id,
                         firstname: character.name.split(' ')[0],
