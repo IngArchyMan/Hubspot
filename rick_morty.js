@@ -34,7 +34,6 @@ async function migrateCharactersAndLocations() {
             if (isPrime(character.id) && character.name === "Rick Sanchez") { // Incluir a Rick Sanchez con ID 1
                 // Mapear datos del personaje a propiedades de contacto en HubSpot
                 const contactProperties = {
-					character_id: 1,
                     firstname: character.name.split(' ')[0],
                     lastname: character.name.split(' ').slice(1).join(' ') || character.name,
 					status_character:character.status,
