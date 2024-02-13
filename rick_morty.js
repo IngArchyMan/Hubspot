@@ -69,16 +69,21 @@ async function migrateCharactersAndLocations() {
 }
 async function upsertContact(email, properties) {
 	console.log('upsertContact');
+ if (typeof email !== 'string' || !email.trim()) {
+    console.error('El email proporcionado es inválido:', email);
+    return; // Detiene la ejecución de la función si el email no es válido
+  }
+
   const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({
-        filterGroups: [{
-            filters: [{
-                propertyName: 'email',
-                operator: 'EQ',
-                value: email 
-            }]
-        }],
-        properties: ['email']
-    });
+    filterGroups: [{
+      filters: [{
+        propertyName: 'email',
+        operator: 'EQ',
+        value: email
+      }]
+    }],
+    properties: ['email']
+  });
 
    
     let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
