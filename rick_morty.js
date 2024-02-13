@@ -84,7 +84,8 @@ async function upsertContact(characterId, properties) {
     filterGroups: [{
       filters: [{
         propertyName: 'character_id', // Asegúrate de que 'character_id' sea el nombre correcto de la propiedad en HubSpot
-        operator: 'EQ' // Convierte el ID a string para la comparación
+        operator: 'EQ',
+        value: (characterId || '').toString() // Convierte el ID a string para la comparación
       }]
     }],
     properties: ['character_id']
@@ -120,7 +121,8 @@ async function upsertCompany(properties) {
         filterGroups: [{
             filters: [{
                 propertyName: 'location_id', // Utilizar location_id como propiedad para la búsqueda
-                operator: 'EQ'
+                operator: 'EQ',
+                value: properties.location_id
             }]
         }],
         properties: ['location_id']
