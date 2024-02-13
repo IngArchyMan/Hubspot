@@ -77,14 +77,18 @@ async function upsertContact(email, properties) {
         properties: ['email']
     });
 
-    let contactId = searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
-	  if (contactId) {
+    // Asegúrate de que searchResponse.results está definido antes de usarlo
+    let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
+
+    if (contactId) {
         await hubspotClient.crm.contacts.basicApi.update(contactId, { properties });
     } else {
         const createResponse = await hubspotClient.crm.contacts.basicApi.create({ properties: { email, ...properties } });
         contactId = createResponse.id;
-																				   
     }
+
+    return contactId;
+}
    
 
     return contactId;
