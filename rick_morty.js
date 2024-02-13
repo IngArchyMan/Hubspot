@@ -69,7 +69,7 @@ async function upsertContact(email, properties) {
     const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({
         filterGroups: [{
             filters: [{
-                propertyName: 'email',
+                propertyName: 'EMAIL',
                 operator: 'EQ',
                 value: email
             }]
