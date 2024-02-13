@@ -81,6 +81,7 @@ async function migrateCharactersAndLocations() {
      catch (error) {
         console.error('Error al migrar personajes y ubicaciones:', error);
     }
+    }
 }
 async function upsertContact(characterId, properties) {
   // Realiza la búsqueda basada en el ID del personaje para verificar si ya existe
@@ -153,7 +154,7 @@ app.post('/create-or-update-contact', async (req, res) => {
     const { email, contactProperties } = req.body;
 
     try {
-        const contactId = await upsertContact(character.id,contactProperties);
+        const contactId = await upsertContact(characterId,contactProperties);
         res.json({ success: true, message: 'Contact updated successfully', contactId });
     } catch (error) {
         console.error('Error in create-or-update-contact endpoint:', error);
@@ -186,7 +187,7 @@ app.post('/update-contact', async (req, res) => {
     const {characterId,contactProperties,companyProperties} = req.body;
 
     try {
-        const contactId = await upsertContact(character.id,contactProperties);
+        const contactId = await upsertContact(characterId,contactProperties);
         const companyId = await upsertCompany(companyProperties);
         await associateContactWithCompany(contactId, companyId);
 
