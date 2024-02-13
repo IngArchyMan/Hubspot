@@ -50,26 +50,26 @@ async function migrateCharactersAndLocations() {
                 // Obtener y migrar la ubicación asociada al personaje
                 const locationUrl = character.location.url;
 				console.log("locationUrl:", locationUrl);
-                if (locationUrl) {
-                    const locationResponse = await axios.get(locationUrl);
-                    const location = locationResponse.data;
+                // if (locationUrl) {
+                //     const locationResponse = await axios.get(locationUrl);
+                //     const location = locationResponse.data;
 					
 
-                    // Mapear datos de la ubicación a propiedades de empresa en HubSpot
-                    const companyProperties = {
-                        name: location.name,
-                        dimension:location.dimension,
-						location_id: location.id,
-                        creation_date:location.created,
-						location_type:location.type		
-                    };
-					console.log("companyProperties:", companyProperties);
-                    // Crear o actualizar la empresa en HubSpot
-                    const companyId = await upsertCompany(companyProperties);
+                //     // Mapear datos de la ubicación a propiedades de empresa en HubSpot
+                //     const companyProperties = {
+                //         name: location.name,
+                //         dimension:location.dimension,
+				// 		location_id: location.id,
+                //         creation_date:location.created,
+				// 		location_type:location.type		
+                //     };
+				// 	console.log("companyProperties:", companyProperties);
+                //     // Crear o actualizar la empresa en HubSpot
+                //     const companyId = await upsertCompany(companyProperties);
 
-                    // Asociar el contacto con la empresa en HubSpot
-                    await associateContactWithCompany(contactId, companyId);
-                }
+                //     // Asociar el contacto con la empresa en HubSpot
+                //     await associateContactWithCompany(contactId, companyId);
+                // }
             }
         }
      catch (error) {
