@@ -40,16 +40,6 @@ async function migrateCharactersAndLocations() {
 					character_species:character.species,
 					character_gender:character.gender};
 				};
-			if (isPrime(character.id)) { // Incluir a Rick Sanchez con ID 1
-                // Mapear datos del personaje a propiedades de contacto en HubSpot
-                const contactProperties = {
-					character_id: character.id,
-                    firstname: character.name.split(' ')[0],
-                    lastname: character.name.split(' ').slice(1).join(' ') || character.name,
-					status_character:character.status,
-					character_species:character.species,
-					character_gender:character.gender};
-				};
 				console.log("contactProperties:", contactProperties);
 				// Crear o actualizar el contacto en HubSpot
 				const contactId = await upsertContact(character.id,contactProperties);
