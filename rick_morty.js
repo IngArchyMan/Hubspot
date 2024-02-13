@@ -7,7 +7,7 @@ const axios = require('axios');
 const app = express();
 app.use(bodyParser.json());
 
-// Agrega esta sección para manejar solicitudes GET a la raíz "/"
+
 app.get('/', (req, res) => {
   res.send('Bienvenido a la API de Rick y Morty en HubSpot');
 });																   
@@ -71,13 +71,13 @@ async function upsertContact(email, properties) {
             filters: [{
                 propertyName: 'email',
                 operator: 'EQ',
-                value: email // Asegúrate de que 'email' tenga un valor no nulo o indefinido aquí
+                value: email 
             }]
         }],
         properties: ['email']
     });
 
-    // Asegúrate de que searchResponse.results está definido antes de usarlo
+   
     let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
 
     if (contactId) {
