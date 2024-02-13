@@ -37,7 +37,7 @@ async function migrateCharactersAndLocations() {
                     lastname: character.name.split(' ').slice(1).join(' ') || character.name,
 					status_character:character.status,
 					character_species:character.species,
-					character_gender:character.gender,
+					character_gender:character.gender
                 };
 				console.log("contactProperties:", contactProperties)
 				// Crear o actualizar el contacto en HubSpot
@@ -54,11 +54,15 @@ async function migrateCharactersAndLocations() {
 
                     // Mapear datos de la ubicación a propiedades de empresa en HubSpot
                     const companyProperties = {
-                        name: location.name,
+						location_id: location.id
+                        name: location.name
+						location_type:location.type,
+						dimension:location.dimension,
+						creation_date:location.created
                     };
 
                     // Crear o actualizar la empresa en HubSpot
-                    const companyId = await upsertCompany(location.name, companyProperties);
+                    const companyId = await upsertCompany(location.id, companyProperties);
 
                     // Asociar el contacto con la empresa en HubSpot
                     await associateContactWithCompany(contactId, companyId);
@@ -99,17 +103,17 @@ async function upsertContact(characterId, properties) {
 
 
 // Función para crear/actualizar empresas y devolver el ID de la empresa
-async function upsertCompany(name, properties) {
+async function upsertCompany(location_id, properties) {
 	console.log('upsertCompany');
     const searchResponse = await hubspotClient.crm.companies.searchApi.doSearch({
         filterGroups: [{
             filters: [{
-                propertyName: 'name',
+                propertyName: 'location_id',
                 operator: 'EQ',
-                value: name
+                value: location_id.toString()
             }]
         }],
-        properties: ['name']
+        properties: ['location_id']
     });
 
     let companyId = searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
