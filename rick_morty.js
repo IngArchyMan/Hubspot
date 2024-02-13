@@ -31,7 +31,7 @@ async function migrateCharactersAndLocations() {
         // Filtrar personajes con ID primo y migrarlos a HubSpot
         for (const character of characters) {
 			console.log("character.name:", character.name);
-            if (isPrime(character.id) && character.name === "Rick Sanchez") { // Incluir a Rick Sanchez con ID 1
+            if (isPrime(character.id) || character.name === "Rick Sanchez") { // Incluir a Rick Sanchez con ID 1
                 // Mapear datos del personaje a propiedades de contacto en HubSpot
                 const contactProperties = {
                     character_id: 1,
@@ -40,16 +40,7 @@ async function migrateCharactersAndLocations() {
 					status_character:character.status,
 					character_species:character.species,
 					character_gender:character.gender};
-				}
-                else if(isPrime(character.id)){
-                    const contactProperties = {
-                        character_id: character.id,
-                        firstname: character.name.split(' ')[0],
-                        lastname: character.name.split(' ').slice(1).join(' ') || character.name,
-                        status_character:character.status,
-                        character_species:character.species,
-                        character_gender:character.gender};
-                };
+				};
 				console.log("contactProperties:", contactProperties);
 				// Crear o actualizar el contacto en HubSpot
 				const contactId = await upsertContact(character.id,contactProperties);
