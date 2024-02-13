@@ -84,29 +84,29 @@ async function upsertContact(characterId, properties) {
   console.log("characterId:", characterId)
   console.log("properties:", properties);
  
-  const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({
-    filterGroups: [{
-      filters: [{
-        propertyName: 'name', // Asegúrate de que 'character_id' sea el nombre correcto de la propiedad en HubSpot
-        operator: 'EQ',
-        value: characterId  // Convierte el ID a string para la comparación
-      }]
-    }],
-    properties: ['name']
-  });
-  console.log("searchResponse:",searchResponse.results);
-  // Verifica si se encontró algún resultado y obtiene el ID del contacto
-  let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
+//   const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({
+//     filterGroups: [{
+//       filters: [{
+//         propertyName: 'name', // Asegúrate de que 'character_id' sea el nombre correcto de la propiedad en HubSpot
+//         operator: 'EQ',
+//         value: characterId  // Convierte el ID a string para la comparación
+//       }]
+//     }],
+//     properties: ['name']
+//   });
+//   console.log("searchResponse:",searchResponse.results);
+//   // Verifica si se encontró algún resultado y obtiene el ID del contacto
+//   let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
 
-  // Si se encuentra el contacto, lo actualiza; si no, crea uno nuevo
-  if (contactId) {
-    await hubspotClient.crm.contacts.basicApi.update(contactId, properties);
-  } else {
-    const createResponse = await hubspotClient.crm.contacts.basicApi.create({ properties: properties });
-    contactId = createResponse.id;
-  }
+//   // Si se encuentra el contacto, lo actualiza; si no, crea uno nuevo
+//   if (contactId) {
+//     await hubspotClient.crm.contacts.basicApi.update(contactId, properties);
+//   } else {
+//     const createResponse = await hubspotClient.crm.contacts.basicApi.create({ properties: properties });
+//     contactId = createResponse.id;
+//   }
 
-  return contactId;
+//   return contactId;
 }
    
 
