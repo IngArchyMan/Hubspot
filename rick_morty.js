@@ -77,7 +77,7 @@ async function migrateCharactersAndLocations() {
 }
 
 async function upsertContact(characterId, properties) {
-  // Realiza la búsqueda basada en el ID del personaje para verificar si ya existe
+  
   console.log("characterId:", characterId)
   console.log("properties:", properties);
   const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({
