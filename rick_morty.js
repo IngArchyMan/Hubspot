@@ -68,10 +68,10 @@ async function migrateCharactersAndLocations() {
     }
 }
 async function upsertContact(email, properties) {
-	console.log('upsertContact');
- if (typeof email !== 'string' || !email.trim()) {
+  // Verificar que el email no sea undefined o un string vacío
+  if (!email) {
     console.error('El email proporcionado es inválido:', email);
-    return; 
+    return; // Salir de la función si el email no es válido
   }
 
   const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({
@@ -85,17 +85,16 @@ async function upsertContact(email, properties) {
     properties: ['email']
   });
 
-   
-    let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
+  let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
 
-    if (contactId) {
-        await hubspotClient.crm.contacts.basicApi.update(contactId, { properties });
-    } else {
-        const createResponse = await hubspotClient.crm.contacts.basicApi.create({ properties: { email, ...properties } });
-        contactId = createResponse.id;
-    }
+  if (contactId) {
+    await hubspotClient.crm.contacts.basicApi.update(contactId, { properties });
+  } else {
+    const createResponse = await hubspotClient.crm.contacts.basicApi.create({ properties: { email, ...properties } });
+    contactId = createResponse.id;
+  }
 
-    return contactId;
+  return contactId;
 }
    
 
