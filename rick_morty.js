@@ -36,7 +36,6 @@ async function migrateCharactersAndLocations() {
                     email: `${character.name.toLowerCase().split(' ').join('.')}@rickandmorty.com`,
                     firstname: character.name.split(' ')[0],
                     lastname: character.name.split(' ').slice(1).join(' ') || character.name,
-                    // Otros mapeos según sea necesario
                 };
 				console.log("contactProperties.email:", contactProperties.email);
 				console.log("contactProperties:", contactProperties)
