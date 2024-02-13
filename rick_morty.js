@@ -55,7 +55,7 @@ async function migrateCharactersAndLocations() {
                     // Mapear datos de la ubicación a propiedades de empresa en HubSpot
                     const companyProperties = {
 						location_id: location.id
-                        name: location.name
+                        name: location.name,
 						location_type:location.type,
 						dimension:location.dimension,
 						creation_date:location.created
