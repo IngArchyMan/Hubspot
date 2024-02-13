@@ -36,16 +36,17 @@ async function migrateCharactersAndLocations() {
             if (isPrime(character.id) || character.name === "Rick Sanchez") { // Incluir a Rick Sanchez con ID 1
                 
                 const contactProperties = {
-                    character_id: character.id,
                     firstname: character.name.split(' ')[0],
                     lastname: character.name.split(' ').slice(1).join(' ') || character.name,
-					status_character: character.status,
+					character_id: character.id,
+                    character_gender: character.gender,
+                    status_character: character.status,
 					character_species :character.species,
-					character_gender: character.gender};
+					};
 				};
 				console.log("contactProperties:", contactProperties);
 				// Crear o actualizar el contacto en HubSpot
-				const contactId = await upsertContact(character.id,contactProperties);
+				const contactId = await upsertContact(character.name,contactProperties);
                 // Obtener y migrar la ubicación asociada al personaje
                 const locationUrl = character.location.url;
 				console.log("locationUrl:", locationUrl);
@@ -56,11 +57,11 @@ async function migrateCharactersAndLocations() {
 
                     // Mapear datos de la ubicación a propiedades de empresa en HubSpot
                     const companyProperties = {
-						location_id: location.id,
                         name: location.name,
-						location_type:location.type,
-						dimension:location.dimension,
-						creation_date:location.created
+                        dimension:location.dimension,
+						location_id: location.id,
+                        creation_date:location.created,
+						location_type:location.type		
                     };
 					console.log("companyProperties:", companyProperties);
                     // Crear o actualizar la empresa en HubSpot
@@ -83,7 +84,7 @@ async function upsertContact(characterId, properties) {
   const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({
     filterGroups: [{
       filters: [{
-        propertyName: 'character_id', // Asegúrate de que 'character_id' sea el nombre correcto de la propiedad en HubSpot
+        propertyName: 'name', // Asegúrate de que 'character_id' sea el nombre correcto de la propiedad en HubSpot
         operator: 'EQ',
         value: (characterId || '').toString() // Convierte el ID a string para la comparación
       }]
@@ -120,9 +121,9 @@ async function upsertCompany(properties) {
     const searchResponse = await hubspotClient.crm.companies.searchApi.doSearch({
         filterGroups: [{
             filters: [{
-                propertyName: 'location_id', // Utilizar location_id como propiedad para la búsqueda
+                propertyName: 'name', // Utilizar location_id como propiedad para la búsqueda
                 operator: 'EQ',
-                value: properties.location_id
+                value: properties.name
             }]
         }],
         properties: ['location_id']
@@ -146,10 +147,10 @@ migrateCharactersAndLocations().then(() => {
 
 // Endpoint para crear o actualizar un contacto
 app.post('/create-or-update-contact', async (req, res) => {
-    const { characterId, contactProperties } = req.body;
+    const { name, contactProperties } = req.body;
 
     try {
-        const contactId = await upsertContact(characterId,contactProperties);
+        const contactId = await upsertContact(name,contactProperties);
         res.json({ success: true, message: 'Contact updated successfully', contactId });
     } catch (error) {
         console.error('Error in create-or-update-contact endpoint:', error);
@@ -179,10 +180,10 @@ async function associateContactWithCompany(contactId, companyId) {
 
 // Endpoint para actualizar contactos y asociarlos con empresas
 app.post('/update-contact', async (req, res) => {
-    const {characterId,contactProperties,companyProperties} = req.body;
+    const {name,contactProperties,companyProperties} = req.body;
 
     try {
-        const contactId = await upsertContact(characterId,contactProperties);
+        const contactId = await upsertContact(name,contactProperties);
         const companyId = await upsertCompany(companyProperties);
         await associateContactWithCompany(contactId, companyId);
 
