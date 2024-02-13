@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const hubspot = require('@hubspot/api-client');
+const axios = require('axios');																									  
 
 const app = express();
 app.use(bodyParser.json());
@@ -12,7 +13,58 @@ app.get('/', (req, res) => {
 });																   
 const hubspotClient = new hubspot.Client({ accessToken: process.env.HUBSPOT_ACCESS_TOKEN });
 
-// Función para crear/actualizar contactos y devolver el ID del contacto
+// Función auxiliar para verificar si un número es primo
+function isPrime(num) {
+    for (let i = 2; i <= Math.sqrt(num); i++) {
+        if (num % i === 0) return false;
+    }
+    return num > 1;
+}
+// Función para consultar la API de Rick y Morty y migrar personajes y ubicaciones
+async function migrateCharactersAndLocations() {
+     try {
+        // Obtener personajes de la API de Rick y Morty
+        const charactersResponse = await axios.get('https://rickandmortyapi.com/api/character');
+        const characters = charactersResponse.data.results;
+
+        // Filtrar personajes con ID primo y migrarlos a HubSpot
+        for (const character of characters) {
+            if (isPrime(character.id) || character.id === 1) { // Incluir a Rick Sanchez con ID 1
+                // Mapear datos del personaje a propiedades de contacto en HubSpot
+                const contactProperties = {
+                    email: `${character.name.toLowerCase().split(' ').join('.')}@rickandmorty.com`,
+                    firstname: character.name.split(' ')[0],
+                    lastname: character.name.split(' ').slice(1).join(' ') || character.name,
+                    // Otros mapeos según sea necesario
+                };
+
+                // Crear o actualizar el contacto en HubSpot
+                const contactId = await upsertContact(contactProperties.email, contactProperties);
+
+                // Obtener y migrar la ubicación asociada al personaje
+                const locationUrl = character.location.url;
+                if (locationUrl) {
+                    const locationResponse = await axios.get(locationUrl);
+                    const location = locationResponse.data;
+
+                    // Mapear datos de la ubicación a propiedades de empresa en HubSpot
+                    const companyProperties = {
+                        name: location.name,
+                        // Otros mapeos según sea necesario
+                    };
+
+                    // Crear o actualizar la empresa en HubSpot
+                    const companyId = await upsertCompany(location.name, companyProperties);
+
+                    // Asociar el contacto con la empresa en HubSpot
+                    await associateContactWithCompany(contactId, companyId);
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Error al migrar personajes y ubicaciones:', error);
+    }
+}
 async function upsertContact(email, properties) {
     const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({
         filterGroups: [{
@@ -64,6 +116,12 @@ async function upsertCompany(name, properties) {
 
     return companyId;
 }
+
+// Ejecutar la migración al iniciar el servidor
+migrateCharactersAndLocations().then(() => {
+    console.log('Migración completada');
+}).catch(console.error);
+
 // Endpoint para crear o actualizar un contacto
 app.post('/create-or-update-contact', async (req, res) => {
     const { email, contactProperties } = req.body;
