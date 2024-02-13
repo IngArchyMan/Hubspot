@@ -24,6 +24,7 @@ function isPrime(num) {
 async function migrateCharactersAndLocations() {
      try {
         // Obtener personajes de la API de Rick y Morty
+		console.log('migrateCharactersAndLocations');
         const charactersResponse = await axios.get('https://rickandmortyapi.com/api/character');
         const characters = charactersResponse.data.results;
 
