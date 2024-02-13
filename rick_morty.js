@@ -102,31 +102,35 @@ async function upsertContact(characterId, properties) {
    
 
 
-// Función para crear/actualizar empresas y devolver el ID de la empresa
-async function upsertCompany(location_id, properties) {
-	console.log('upsertCompany');
-    const searchResponse = await hubspotClient.crm.companies.searchApi.doSearch({
+async function upsertContact(properties) {
+    // Verificar si el location_id está presente y es válido
+    if (!properties.location_id) {
+        console.error('El location_id proporcionado es inválido.');
+        return; // Detener la ejecución si no hay un location_id válido
+    }
+
+    let contactId = null;
+    // Realizar la búsqueda del contacto en HubSpot usando el location_id
+    const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({
         filterGroups: [{
             filters: [{
-                propertyName: 'location_id',
+                propertyName: 'location_id', // Utilizar location_id como propiedad para la búsqueda
                 operator: 'EQ',
-                value: location_id.toString()
+                value: properties.location_id
             }]
         }],
         properties: ['location_id']
     });
 
-    let companyId = searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
-
-    if (companyId) {
-        await hubspotClient.crm.companies.basicApi.update(companyId, { properties });
+    if (searchResponse.results && searchResponse.results.length > 0) {
+        contactId = searchResponse.results[0].id;
+        await hubspotClient.crm.contacts.basicApi.update(contactId, { properties });
     } else {
-        const createResponse = await hubspotClient.crm.companies.basicApi.create({ properties: { name, ...properties } });
-        companyId = createResponse.id;
+        const createResponse = await hubspotClient.crm.contacts.basicApi.create({ properties });
+        contactId = createResponse.id;
     }
-   
 
-    return companyId;
+    return contactId;
 }
 
 // Ejecutar la migración al iniciar el servidor
