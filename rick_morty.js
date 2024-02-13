@@ -52,7 +52,6 @@ async function migrateCharactersAndLocations() {
                     // Mapear datos de la ubicación a propiedades de empresa en HubSpot
                     const companyProperties = {
                         name: location.name,
-                        // Otros mapeos según sea necesario
                     };
 
                     // Crear o actualizar la empresa en HubSpot
