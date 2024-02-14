@@ -87,11 +87,11 @@ async function upsertContact(characterId, properties) {
     filterGroups: [{
       filters: [{
         propertyName: 'character_id', // Make sure this is the correct property name.
-        operator: "EQ",
+        operator: 'EQ',
         value: characterId
       }]
     }],
-    properties: ['character_id']
+    properties: ['character_id','firstname', 'lastname']
   };
   
   console.log("searchRequest:", searchRequest);
@@ -121,7 +121,7 @@ async function upsertCompany(properties) {
         filterGroups: [{
           filters: [{
             propertyName:'location_id', // Make sure this is the correct property name.
-            operator: "EQ",
+            operator: 'EQ',
             value: properties.location_id
           }]
         }],
