@@ -47,30 +47,30 @@ async function migrateCharactersAndLocations() {
                     
                     console.log("contactProperties:", contactProperties.character_id);
                     contactId = await upsertContact(contactProperties.character_id,contactProperties);
-                    // console.log("contactId", contactId);
-                    // const locationUrl = character.location.url;
-                    // console.log("locationUrl:", locationUrl);
-                    // let companyProperties;
-                    // if (locationUrl) {
-                    //     const locationResponse = await axios.get(locationUrl);
-                    //     const location = locationResponse.data;
+                    console.log("contactId", contactId);
+                    const locationUrl = character.location.url;
+                    console.log("locationUrl:", locationUrl);
+                    let companyProperties;
+                    if (locationUrl) {
+                        const locationResponse = await axios.get(locationUrl);
+                        const location = locationResponse.data;
 
-                    //     companyProperties = {
-                    //         name: location.name,
-                    //         dimension:location.dimension,
-                    //         location_id: location.id,
-                    //         creation_date:location.created,
-                    //         location_type:location.type		
-                    //     };
+                        companyProperties = {
+                            name: location.name,
+                            dimension:location.dimension,
+                            location_id: location.id,
+                            creation_date:location.created,
+                            location_type:location.type		
+                        };
 
-                    //     console.log("companyProperties:", companyProperties.location_id);
-                    //     // Crear o actualizar la empresa en HubSpot
-                    //     companyId = await upsertCompany(companyProperties.location_id,companyProperties);
-                    //     console.log("companyId", companyId);
-                        // Asociar el contacto con la empresa en HubSpot
-                        //const response= await associateContactWithCompany(contactId, companyId);
-                    //console.log("respuesta final ", response)
-                   // }
+                        console.log("companyProperties:", companyProperties.location_id);
+                        // Crear o actualizar la empresa en HubSpot
+                        companyId = await upsertCompany(companyProperties.location_id,companyProperties);
+                        console.log("companyId", companyId);
+                        //Asociar el contacto con la empresa en HubSpot
+                        const response= await associateContactWithCompany(contactId, companyId);
+                    console.log("respuesta final ", response)
+                   }
 				};
             }
        }
@@ -150,31 +150,37 @@ async function upsertCompany(location_id, properties) {
 }
 }
 async function associateContactWithCompany(contactId, companyId) {
-    console.log("associateContactWithCompany")
-    console.log("associateContactWithCompany")
-    console.log("associateContactWithCompany")
+    console.log("associateContactWithCompany");
     console.log("properties upsertCompanylocation_id:", contactId);
     console.log("properties upsertCompanylocation_id:", companyId);
-    // const BatchInputPublicAssociation = {
-    //     inputs: [
-    //         {
-    //             _from: {
-    //                 id : contactId
-    //             },
-    //             to: {
-    //                 id: companyId
-    //             },
-    //             type: 'contact_to_company'
-    //         }
-    //     ]
-    // };
+
+
+    if (!contactId || !companyId) { 
+        console.error("Error: contactId y companyId son requeridos y deben ser válidos.");
+        return; 
+    }
+
+
+    const BatchInputPublicAssociation = {
+        inputs: [
+            {
+                _from: {
+                    id: contactId
+                },
+                to: {
+                    id: companyId
+                },
+                type: 'contact_to_company'
+            }
+        ]
+    };
     
-    // const response = await hubspotClient.crm.associations.batchApi.create(
-    //     'contact',
-    //     'companies',
-    //     BatchInputPublicAssociation
-    // );
-    // return response;
+    const response = await hubspotClient.crm.associations.batchApi.create(
+        'contact',
+        'companies',
+        BatchInputPublicAssociation
+    );
+    return response;
 }
 
 // Ejecutar la migración al iniciar el servidor
