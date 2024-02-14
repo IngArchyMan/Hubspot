@@ -33,7 +33,7 @@ async function migrateCharactersAndLocations() {
 			console.log("character.name:", character.name);
             let contactProperties;
             
-            if (isPrime(character.id) || character.name === "Rick Sanchez" && character != null ) { // Incluir a Rick Sanchez con ID 1
+            if (character && (isPrime(character.id) || character.name === "Rick Sanchez")) { // Incluir a Rick Sanchez con ID 1
                 
                  contactProperties = {
                     firstname: character.name.split(' ')[0],
