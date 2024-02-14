@@ -82,7 +82,7 @@ async function upsertContact(characterId, properties) {
   console.log("upsertContact:")
   console.log("characterId:", characterId)
   console.log("properties:", properties);
-  
+  if(characterId != null ){
   const searchRequest = {
     filterGroups: [{
       filters: [{
@@ -105,19 +105,21 @@ async function upsertContact(characterId, properties) {
   if (contactId) {
     await hubspotClient.crm.contacts.basicApi.update(contactId, properties);
   } else {
-if(characterId != null ){
+
     const createResponse = await hubspotClient.crm.contacts.basicApi.create({ properties: properties});
     contactId = createResponse.id;
     }
-  }
-
+  
+  
   return contactId;
+}
 }
    
 
 
 async function upsertCompany(location_id, properties) {
     console.log("properties upsertCompanylocation_id:", location_id);
+    if(location_id != null ){
      const searchRequest = {
         filterGroups: [{
           filters: [{
@@ -139,13 +141,13 @@ async function upsertCompany(location_id, properties) {
     if (contactId) {
       await hubspotClient.crm.companies.basicApi.update(contactId, properties);
     } else {
-      if(location_id != null ){
+     
       const createResponse = await hubspotClient.crm.companies.basicApi.create({ properties: properties });
       contactId = createResponse.id;
       }
-    }
-  
+      
     return contactId;
+}
 }
 async function associateContactWithCompany(contactId, companyId) {
     const BatchInputPublicAssociation = {
