@@ -174,7 +174,7 @@ async function associateContactWithCompany(contactId, companyId) {
     };
     console.log("BatchInputPublicAssociation", BatchInputPublicAssociation);
    
-    const response = await hubspotClient.crm.associations.v4.batchApi.create(
+    const response = await hubspotClient.crm.associations.batchApi.create(
         'contacts',
         'companies',
         BatchInputPublicAssociation
