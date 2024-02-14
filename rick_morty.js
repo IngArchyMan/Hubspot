@@ -89,7 +89,7 @@ async function upsertContact(characterId, properties) {
     {
         filters: [
         {
-            propertyName: 'name', // Asegúrate de que 'character_id' sea el nombre correcto de la propiedad en HubSpot
+            propertyName: 'name',
             operator: 'GTE',
             value: characterId
         }
