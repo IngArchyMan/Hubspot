@@ -105,7 +105,7 @@ async function upsertContact(characterId, properties) {
   if (contactId) {
     await hubspotClient.crm.contacts.basicApi.update(contactId, properties);
   } else {
-if(properties != null || properties != ''){
+if(characterId != null || characterId!= ''){
     const createResponse = await hubspotClient.crm.contacts.basicApi.create({ properties: properties });
     contactId = createResponse.id;
     }
@@ -139,7 +139,7 @@ async function upsertCompany(location_id, properties) {
     if (contactId) {
       await hubspotClient.crm.companies.basicApi.update(contactId, properties);
     } else {
-      if(properties != null || properties != ''){
+      if(location_id != null || location_id != ''){
       const createResponse = await hubspotClient.crm.companies.basicApi.create({ properties: properties });
       contactId = createResponse.id;
       }
