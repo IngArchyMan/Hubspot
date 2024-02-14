@@ -46,30 +46,30 @@ async function migrateCharactersAndLocations() {
                     
                     console.log("contactProperties:", contactProperties.character_id);
                     const contactId = await upsertContact(contactProperties.character_id,contactProperties);
-                    // const locationUrl = character.location.url;
-                    // console.log("locationUrl:", locationUrl);
-                    // let companyProperties;
-                    // if (locationUrl) {
-                    //     const locationResponse = await axios.get(locationUrl);
-                    //     const location = locationResponse.data;
+                    const locationUrl = character.location.url;
+                    console.log("locationUrl:", locationUrl);
+                    let companyProperties;
+                    if (locationUrl) {
+                        const locationResponse = await axios.get(locationUrl);
+                        const location = locationResponse.data;
                         
     
-                    //     // Mapear datos de la ubicación a propiedades de empresa en HubSpot
-                    //     companyProperties = {
-                    //         name: location.name,
-                    //         dimension:location.dimension,
-                    //         location_id: location.id,
-                    //         creation_date:location.created,
-                    //         location_type:location.type		
-                    //     };
-                    //     console.log("companyProperties:", companyProperties);
-                    //     // Crear o actualizar la empresa en HubSpot
-                    //     const companyId = await upsertCompany(companyProperties);
+                        // Mapear datos de la ubicación a propiedades de empresa en HubSpot
+                        companyProperties = {
+                            name: location.name,
+                            dimension:location.dimension,
+                            location_id: location.id,
+                            creation_date:location.created,
+                            location_type:location.type		
+                        };
+                        console.log("companyProperties:", companyProperties);
+                        // Crear o actualizar la empresa en HubSpot
+                        const companyId = await upsertCompany(companyProperties.location_id,companyProperties);
     
-                    //     // Asociar el contacto con la empresa en HubSpot
-                    //     const response= await associateContactWithCompany(contactId, companyId);
-                    //     console.log(response)
-                    // }
+                        // Asociar el contacto con la empresa en HubSpot
+                        const response= await associateContactWithCompany(contactId, companyId);
+                        console.log(response)
+                    }
 				};
             }
        }
@@ -91,7 +91,7 @@ async function upsertContact(characterId, properties) {
         value: characterId
       }]
     }],
-    properties: ['character_id','firstname', 'lastname']
+    properties: ['character_id']
   };
   
   console.log("searchRequest:", searchRequest);
@@ -99,30 +99,30 @@ async function upsertContact(characterId, properties) {
    const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch(searchRequest);
    console.log("earchResponse:", searchResponse);
   //Verifica si se encontró algún resultado y obtiene el ID del contacto
-//   let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
+  let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
 
-//   // Si se encuentra el contacto, lo actualiza; si no, crea uno nuevo
-//   if (contactId) {
-//     await hubspotClient.crm.contacts.basicApi.update(contactId, properties);
-//   } else {
-//     const createResponse = await hubspotClient.crm.contacts.basicApi.create({ properties: properties });
-//     contactId = createResponse.id;
-//     console.log("contactId:", contactId);
-//   }
+  // Si se encuentra el contacto, lo actualiza; si no, crea uno nuevo
+  if (contactId) {
+    await hubspotClient.crm.contacts.basicApi.update(contactId, properties);
+  } else {
+    const createResponse = await hubspotClient.crm.contacts.basicApi.create({ properties: properties });
+    contactId = createResponse.id;
+    console.log("contactId:", contactId);
+  }
 
-//   return contactId;
+  return contactId;
 }
    
 
 
-async function upsertCompany(properties) {
+async function upsertCompany(location_id,properties) {
     console.log("properties upsertCompany:", properties);
      const searchRequest = {
         filterGroups: [{
           filters: [{
             propertyName:'location_id', // Make sure this is the correct property name.
             operator: 'EQ',
-            value: properties.location_id
+            value: location_id
           }]
         }],
         properties:['location_id']
@@ -187,10 +187,10 @@ app.post('/create-or-update-contact', async (req, res) => {
 
 // Endpoint para crear o actualizar una ubicación (company)
 app.post('/create-or-update-company', async (req, res) => {
-const { companyProperties } = req.body;
+const {location_id, companyProperties } = req.body;
 
     try {
-        const companyId = await upsertCompany(companyProperties);
+    const companyId = await upsertCompany(location_id,companyProperties);
         res.json({ success: true, message: 'Location updated successfully', companyId });
     } catch (error) {
         console.error('Error in create-or-update-location endpoint:', error);
