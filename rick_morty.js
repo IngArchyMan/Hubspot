@@ -44,8 +44,8 @@ async function migrateCharactersAndLocations() {
 					character_species :character.species,
 					};
                     
-                    console.log("contactProperties:", character.id);
-                    const contactId = await upsertContact(character.id,contactProperties);
+                    console.log("contactProperties:", contactProperties.character_id);
+                    const contactId = await upsertContact(contactProperties.character_id,contactProperties);
                     // const locationUrl = character.location.url;
                     // console.log("locationUrl:", locationUrl);
                     // let companyProperties;
