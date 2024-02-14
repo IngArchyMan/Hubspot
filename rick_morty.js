@@ -22,7 +22,7 @@ function isPrime(num) {
 }
 // Función para consultar la API de Rick y Morty y migrar personajes y ubicaciones
 async function migrateCharactersAndLocations() {
-     //try {
+     try {
         // Obtener personajes de la API de Rick y Morty
 		
         const charactersResponse = await axios.get('https://rickandmortyapi.com/api/character');
@@ -72,10 +72,10 @@ async function migrateCharactersAndLocations() {
                     }
 				};
             }
-        //}
-     //catch (error) {
-        //console.error('Error al migrar personajes y ubicaciones:', error);
-    //}
+       }
+     catch (error) {
+        console.error('Error al migrar personajes y ubicaciones:', error);
+    }
 }
 
 async function upsertContact(characterId, properties) {
@@ -87,7 +87,7 @@ async function upsertContact(characterId, properties) {
     filterGroups: [{
       filters: [{
         propertyName: 'character_id', // Make sure this is the correct property name.
-        operator: "GTE",
+        operator: "EQ",
         value: characterId
       }]
     }],
