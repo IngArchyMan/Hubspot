@@ -162,7 +162,7 @@ const BatchInputPublicAssociation = { inputs: [{"_from":{"id":contactId.toString
 
     console.log("BatchInputPublicAssociation", BatchInputPublicAssociation);
    
-    const response = await hubspotClient.crm.associations.v4.batchApi.createDefault(
+    const response = await hubspotClient.crm.associations.batchApi.create(
         'contact',
         'companies',
         BatchInputPublicAssociation
