@@ -169,37 +169,62 @@ async function associateContactWithCompany(contactId, companyId) {
     );
     return response;
 }
+
 // Ejecutar la migración al iniciar el servidor
 migrateCharactersAndLocations().then(() => {
-    console.log('Migración completada :D');
+    console.log('Migración completada');
 }).catch(console.error);
 
-// Endpoint para crear o actualizar un contacto
-app.post('/create-or-update-contact', async (req, res) => {
-    const { character_id, contactProperties } = req.body;
+const { body, validationResult } = require('express-validator');
 
-    try {
-        const contactId = await upsertContact(character_id,contactProperties);
-        res.json({ success: true, message: 'Contact updated successfully', contactId });
-    } catch (error) {
-        console.error('Error in create-or-update-contact endpoint:', error);
-        res.status(500).json({ success: false, message: 'Internal server error' });
-    }
+// Definir el endpoint con validaciones
+app.post('/create-or-update-contact', [
+  body('character_id').isInt().withMessage('Character ID must be an integer'),
+  body('contactProperties.firstname').not().isEmpty().withMessage('First name is required'),
+  body('contactProperties.lastname').not().isEmpty().withMessage('Last name is required'),
+  // Agrega más validaciones según sea necesario
+], async (req, res) => {
+  // Verificar errores de validación
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ success: false, errors: errors.array() });
+  }
+
+  // Procesar la solicitud si los datos son válidos
+  const { character_id, contactProperties } = req.body;
+
+  try {
+    const contactId = await upsertContact(character_id, contactProperties);
+    res.json({ success: true, message: 'Contact updated successfully', contactId });
+  } catch (error) {
+    console.error('Error in create-or-update-contact endpoint:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
 });
 
-// Endpoint para crear o actualizar una ubicación (company)
-app.post('/create-or-update-company', async (req, res) => {
-const {location_id, companyProperties } = req.body;
-
-    try {
-    const companyId = await upsertCompany(location_id,companyProperties);
-        res.json({ success: true, message: 'Location updated successfully', companyId });
-    } catch (error) {
-        console.error('Error in create-or-update-location endpoint:', error);
-        res.status(500).json({ success: false, message: 'Internal server error' });
+app.post('/create-or-update-company', [
+    body('location_id').isInt().withMessage('Location ID must be an integer'),
+    body('companyProperties.name').not().isEmpty().withMessage('Company name is required'),
+    // Agrega más validaciones según sea necesario
+  ], async (req, res) => {
+    // Verificar errores de validación
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, errors: errors.array() });
     }
-});
-
+  
+    // Procesar la solicitud si los datos son válidos
+    const { location_id, companyProperties } = req.body;
+  
+    try {
+      const companyId = await upsertCompany(location_id, companyProperties);
+      res.json({ success: true, message: 'Location updated successfully', companyId });
+    } catch (error) {
+      console.error('Error in create-or-update-company endpoint:', error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+  });
+  
 // Iniciar el servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
