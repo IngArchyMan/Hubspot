@@ -67,7 +67,7 @@ async function migrateCharactersAndLocations() {
                         const companyId = await upsertCompany(companyProperties);
     
                         // Asociar el contacto con la empresa en HubSpot
-                        const response= await associateContactWithCompany(contactId, companyId);
+                        //const response= await associateContactWithCompany(contactId, companyId);
                         console.log(response)
                     }
 				};
@@ -126,7 +126,7 @@ async function upsertCompany(properties) {
         filterGroups: [{
           filters: [{
             propertyName:'location_id', // Make sure this is the correct property name.
-            operator: "GTE",
+            operator: "EQ",
             value: properties.location_id
           }]
         }],
