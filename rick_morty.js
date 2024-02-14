@@ -46,30 +46,30 @@ async function migrateCharactersAndLocations() {
                     
                     console.log("contactProperties:", character.id);
                     const contactId = await upsertContact(character.id,contactProperties);
-                    const locationUrl = character.location.url;
-                    console.log("locationUrl:", locationUrl);
-                    let companyProperties;
-                    if (locationUrl) {
-                        const locationResponse = await axios.get(locationUrl);
-                        const location = locationResponse.data;
+                    // const locationUrl = character.location.url;
+                    // console.log("locationUrl:", locationUrl);
+                    // let companyProperties;
+                    // if (locationUrl) {
+                    //     const locationResponse = await axios.get(locationUrl);
+                    //     const location = locationResponse.data;
                         
     
-                        // Mapear datos de la ubicación a propiedades de empresa en HubSpot
-                        companyProperties = {
-                            name: location.name,
-                            dimension:location.dimension,
-                            location_id: location.id,
-                            creation_date:location.created,
-                            location_type:location.type		
-                        };
-                        console.log("companyProperties:", companyProperties);
-                        // Crear o actualizar la empresa en HubSpot
-                        const companyId = await upsertCompany(companyProperties);
+                    //     // Mapear datos de la ubicación a propiedades de empresa en HubSpot
+                    //     companyProperties = {
+                    //         name: location.name,
+                    //         dimension:location.dimension,
+                    //         location_id: location.id,
+                    //         creation_date:location.created,
+                    //         location_type:location.type		
+                    //     };
+                    //     console.log("companyProperties:", companyProperties);
+                    //     // Crear o actualizar la empresa en HubSpot
+                    //     const companyId = await upsertCompany(companyProperties);
     
-                        // Asociar el contacto con la empresa en HubSpot
-                        const response= await associateContactWithCompany(contactId, companyId);
-                        console.log(response)
-                    }
+                    //     // Asociar el contacto con la empresa en HubSpot
+                    //     const response= await associateContactWithCompany(contactId, companyId);
+                    //     console.log(response)
+                    // }
 				};
             }
        }
