@@ -132,9 +132,9 @@ async function upsertCompany(properties) {
       };
       console.log("searchRequest:", searchRequest);
   
-    // const searchResponse = await hubspotClient.crm.companies.searchApi.doSearch(searchRequest);  
-    // // Realizar la búsqueda del contacto en HubSpot usando el location_id
-    // console.log("earchResponse:", searchResponse);
+    const searchResponse = await hubspotClient.crm.companies.searchApi.doSearch(searchRequest);  
+    // Realizar la búsqueda del contacto en HubSpot usando el location_id
+    console.log("earchResponse:", searchResponse);
     //let contactId = null;
     // if (searchResponse.results && searchResponse.results.length > 0) {
     //     contactId = searchResponse.results[0].id;
