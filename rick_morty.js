@@ -150,7 +150,28 @@ async function upsertCompany(properties) {
   
     return contactId;
 }
-
+async function associateContactWithCompany(contactId, companyId) {
+    const BatchInputPublicAssociation = {
+        inputs: [
+            {
+                _from: {
+                    id : contactId
+                },
+                to: {
+                    id: companyId
+                },
+                type: 'contact_to_company'
+            }
+        ]
+    };
+    
+    const response = await hubspotClient.crm.associations.batchApi.create(
+        'contact',
+        'companies',
+        BatchInputPublicAssociation
+    );
+    return response;
+}
 // Ejecutar la migración al iniciar el servidor
 migrateCharactersAndLocations().then(() => {
     console.log('Migración completada');
@@ -182,50 +203,14 @@ app.post('/create-or-update-company', async (req, res) => {
     }
 });
 
-// Endpoint para actualizar contactos y asociarlos con empresas
-app.post('/update-contact', async (req, res) => {
-    const {location_id,contactProperties,companyProperties} = req.body;
-
-    try {
-        const contactId = await upsertContact(location_id,contactProperties);
-        const companyId = await upsertCompany(companyProperties);
-        await associateContactWithCompany(contactId, companyId);
-
-        res.json({ success: true, message: 'Contact and company updated and associated successfully' });
-    } catch (error) {
-        console.error('Error in update-contact endpoint:', error);
-        res.status(500).json({ success: false, message: 'Internal server error' });
-    }
-});
 // Iniciar el servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
 
-// Función para asociar contactos con empresas
-async function associateContactWithCompany(contactId, companyId) {
-    const BatchInputPublicAssociation = {
-        inputs: [
-            {
-                _from: {
-                    id : contactId
-                },
-                to: {
-                    id: companyId
-                },
-                type: 'contact_to_company'
-            }
-        ]
-    };
-    
-    const response = await hubspotClient.crm.associations.batchApi.create(
-        'contact',
-        'companies',
-        BatchInputPublicAssociation
-    );
-    return response;
-}
+
+
 
 
 
