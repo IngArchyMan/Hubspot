@@ -158,7 +158,7 @@ async function associateContactWithCompany(contactId, companyId) {
         return; 
     }
 
-    const BatchInputPublicAssociation = { inputs: [{"_from":{"id":contactId.toString()},"to":{"id":companyId.toString()}}] };
+const BatchInputPublicAssociation = { inputs: [{"_from":{"id":contactId.toString()},"to":{"id":companyId.toString()}}] };
     // const BatchInputPublicAssociation = {
     //     inputs: [
     //         {
@@ -173,12 +173,12 @@ async function associateContactWithCompany(contactId, companyId) {
     //     ]
     // };
     console.log("BatchInputPublicAssociation", BatchInputPublicAssociation);
-    // const response = await hubspotClient.crm.associations.batchApi.create(
-    //     'contact',
-    //     'companies',
-    //     BatchInputPublicAssociation
-    // );
-    // return response;
+    const response = await hubspotClient.crm.associations.batchApi.create(
+        'contact',
+        'companies',
+        BatchInputPublicAssociation
+    );
+    return response;
 }
 
 // Ejecutar la migración al iniciar el servidor
