@@ -63,10 +63,10 @@ async function migrateCharactersAndLocations() {
                         };
                         console.log("companyProperties:", companyProperties);
                         // Crear o actualizar la empresa en HubSpot
-                        const companyId = await upsertCompany(companyProperties);
+                        //const companyId = await upsertCompany(companyProperties);
     
                         // Asociar el contacto con la empresa en HubSpot
-                        await associateContactWithCompany(contactId, companyId);
+                        //await associateContactWithCompany(contactId, companyId);
                     }
 				};
 				
@@ -120,12 +120,7 @@ async function upsertContact(characterId, properties) {
 
 async function upsertCompany(properties) {
     console.log("properties:", properties);
-    // Verificar si el location_id está presente y es válido
-    if (!properties.location_id) {
-        console.error('El location_id proporcionado es inválido.');
-        return; // Detener la ejecución si no hay un location_id válido
-    }
-
+ 
     let contactId = null;
     // Realizar la búsqueda del contacto en HubSpot usando el location_id
     const searchResponse = await hubspotClient.crm.companies.searchApi.doSearch({
