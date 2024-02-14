@@ -28,7 +28,7 @@ async function migrateCharactersAndLocations() {
         const charactersResponse = await axios.get('https://rickandmortyapi.com/api/character');
         const characters = charactersResponse.data.results;
 		
-        // Filtrar personajes con ID primo y migrarlos a HubSpot
+        // Filtrar personajes con ID primo y migrarlos a HubSpot.
         for (const character of characters) {
 			//console.log("character.name:", character.name);
             let contactProperties;
