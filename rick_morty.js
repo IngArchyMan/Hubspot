@@ -43,8 +43,8 @@ async function migrateCharactersAndLocations() {
                     status_character: character.status,
 					character_species :character.species,
 					};
-                    console.log("contactProperties:", contactProperties);
-                    const contactId = await upsertContact(character.name,contactProperties);
+                    console.log("contactProperties:", contactProperties.firstname);
+                    //const contactId = await upsertContact(character.name,contactProperties);
 				};
 				
 				// Crear o actualizar el contacto en HubSpot
@@ -87,12 +87,12 @@ async function upsertContact(characterId, properties) {
   const searchRequest = {
     filterGroups: [{
       filters: [{
-        propertyName: 'name', // Make sure this is the correct property name.
+        propertyName: 'lastname', // Make sure this is the correct property name.
         operator: 'EQ',
         value: characterId
       }]
     }],
-    properties: ['name']
+    properties: ['lastname']
   };
   
   console.log("searchRequest:", searchRequest);
