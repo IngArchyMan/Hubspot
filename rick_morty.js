@@ -91,7 +91,7 @@ async function upsertContact(characterId, properties) {
     filterGroups: [{
       filters: [{
         propertyName: 'character_id', // Make sure this is the correct property name.
-        operator: 'EQ',
+        operator: "GTE",
         value: characterId
       }]
     }],
@@ -125,7 +125,7 @@ async function upsertCompany(properties) {
         filterGroups: [{
           filters: [{
             propertyName:'name', // Make sure this is the correct property name.
-            operator: 'EQ',
+            operator: "GTE",
             value: properties.name
           }]
         }],
