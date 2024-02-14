@@ -68,7 +68,7 @@ async function migrateCharactersAndLocations() {
     
                         // Asociar el contacto con la empresa en HubSpot
                         const response= await associateContactWithCompany(contactId, companyId);
-                        console.log(response)
+                        console.log("respuesta final ",response)
                     }
 				};
             }
@@ -107,7 +107,7 @@ async function upsertContact(characterId, properties) {
   } else {
     const createResponse = await hubspotClient.crm.contacts.basicApi.create({ properties: properties });
     contactId = createResponse.id;
-    console.log("contactId:", contactId);
+
   }
 
   return contactId;
@@ -140,7 +140,7 @@ async function upsertCompany(location_id, properties) {
     } else {
       const createResponse = await hubspotClient.crm.companies.basicApi.create({ properties: properties });
       contactId = createResponse.id;
-      console.log("contactId:", contactId);
+
     }
   
     return contactId;
