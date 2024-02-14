@@ -143,7 +143,7 @@ async function upsertCompany(properties) {
         contactId = searchResponse.results[0].id;
         await hubspotClient.crm.companies.basicApi.update(contactId,  properties);
     } else {
-        const createResponse = await hubspotClient.crm.companies.basicApi.create({ properties: { ...properties, location_id: properties.location_id} });
+        const createResponse = await hubspotClient.crm.companies.basicApi.create({properties: properties});
         contactId = createResponse.id;
     }
 
