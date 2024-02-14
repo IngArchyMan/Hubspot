@@ -119,25 +119,23 @@ async function upsertContact(characterId, properties) {
 
 
 async function upsertCompany(properties) {
-    console.log("properties:", properties);
- 
-    let contactId = null;
-    const searchRequest = {
+    console.log("properties upsertCompany:", properties);
+     const searchRequest = {
         filterGroups: [{
           filters: [{
-            propertyName: 'name', // Make sure this is the correct property name.
+            propertyName:'name', // Make sure this is the correct property name.
             operator: 'EQ',
             value: properties.name
           }]
         }],
-        properties: ['name']
+        properties:['name']
       };
       console.log("searchRequest:", searchRequest);
   
     // const searchResponse = await hubspotClient.crm.companies.searchApi.doSearch(searchRequest);  
     // // Realizar la búsqueda del contacto en HubSpot usando el location_id
     // console.log("earchResponse:", searchResponse);
- 
+    //let contactId = null;
     // if (searchResponse.results && searchResponse.results.length > 0) {
     //     contactId = searchResponse.results[0].id;
     //     await hubspotClient.crm.companies.basicApi.update(contactId,  properties);
