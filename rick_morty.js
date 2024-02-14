@@ -151,8 +151,8 @@ async function upsertCompany(location_id, properties) {
 }
 async function associateContactWithCompany(contactId, companyId) {
 
-
-
+    console.log("contactId", contactId);
+    console.log("companyId", companyId);
     if (!contactId || !companyId) { 
         console.error("Error: contactId y companyId son requeridos y deben ser válidos.");
         return; 
@@ -162,11 +162,11 @@ const BatchInputPublicAssociation = { inputs: [{"_from":{"id":contactId.toString
 
     console.log("BatchInputPublicAssociation", BatchInputPublicAssociation);
    
-    const response = await hubspotClient.crm.associations.v4.batchApi.create(
-        'contact',
-        'companies',
-        BatchInputPublicAssociation
-    );
+    // const response = await hubspotClient.crm.associations.v4.batchApi.create(
+    //     'contact',
+    //     'companies',
+    //     BatchInputPublicAssociation
+    // );
  
 }
 
