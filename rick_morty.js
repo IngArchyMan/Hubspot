@@ -69,7 +69,7 @@ async function migrateCharactersAndLocations() {
                         console.log("companyId", companyId);
                         // Asociar el contacto con la empresa en HubSpot
                         //const response= await associateContactWithCompany(contactId, companyId);
-                    console.log("respuesta final ", response)
+                    //console.log("respuesta final ", response)
                     }
 				};
             }
