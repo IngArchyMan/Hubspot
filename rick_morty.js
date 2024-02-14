@@ -24,7 +24,7 @@ function isPrime(num) {
 async function migrateCharactersAndLocations() {
      try {
         // Obtener personajes de la API de Rick y Morty
-		console.log('migrateCharactersAndLocations');
+		
         const charactersResponse = await axios.get('https://rickandmortyapi.com/api/character');
         const characters = charactersResponse.data.results;
 		
@@ -32,7 +32,7 @@ async function migrateCharactersAndLocations() {
         for (const character of characters) {
 			console.log("character.name:", character.name);
             let contactProperties;
-            let companyProperties;
+            
             if (isPrime(character.id) || character.name === "Rick Sanchez") { // Incluir a Rick Sanchez con ID 1
                 
                  contactProperties = {
@@ -48,13 +48,14 @@ async function migrateCharactersAndLocations() {
                     const contactId = await upsertContact(character.id,contactProperties);
                     const locationUrl = character.location.url;
                     console.log("locationUrl:", locationUrl);
+                    let companyProperties;
                     if (locationUrl) {
                         const locationResponse = await axios.get(locationUrl);
                         const location = locationResponse.data;
                         
     
                         // Mapear datos de la ubicación a propiedades de empresa en HubSpot
-                        const companyProperties = {
+                        companyProperties = {
                             name: location.name,
                             dimension:location.dimension,
                             location_id: location.id,
