@@ -131,12 +131,12 @@ async function upsertCompany(properties) {
     const searchResponse = await hubspotClient.crm.companies.searchApi.doSearch({
         filterGroups: [{
             filters: [{
-                propertyName: 'company name', // Utilizar location_id como propiedad para la búsqueda
+                propertyName: 'name', // Utilizar location_id como propiedad para la búsqueda
                 operator: 'EQ',
                 value: properties.name
             }]
         }],
-        properties: ['company name']
+        properties: ['name']
     });
 
     if (searchResponse.results && searchResponse.results.length > 0) {
