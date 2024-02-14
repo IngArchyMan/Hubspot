@@ -85,13 +85,17 @@ async function upsertContact(characterId, properties) {
   console.log("properties:", properties);
 
   const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({
-    filterGroups: [{
-      filters: [{
+    filterGroups: [
+        {
+      filters: [
+        {
         propertyName: 'name', // Asegúrate de que 'character_id' sea el nombre correcto de la propiedad en HubSpot
-        operator: 'EQ',
+        operator: 'GTE',
         value: characterId  // Convierte el ID a string para la comparación
-      }]
-    }],
+      }
+    ]
+    }
+    ],
     properties: ['name']
   });
   console.log("searchResponse:",searchResponse.results);
