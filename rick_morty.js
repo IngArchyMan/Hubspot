@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
   res.send('Bienvenido a la API de Rick y Morty en HubSpot');
-});																   
+});	
 const hubspotClient = new hubspot.Client({ accessToken: process.env.HUBSPOT_ACCESS_TOKEN });
 
 // Función auxiliar para verificar si un número es primo
