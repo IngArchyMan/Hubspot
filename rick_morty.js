@@ -135,16 +135,18 @@ async function upsertCompany(properties) {
     const searchResponse = await hubspotClient.crm.companies.searchApi.doSearch(searchRequest);  
     // Realizar la búsqueda del contacto en HubSpot usando el location_id
     console.log("earchResponse:", searchResponse);
-    //let contactId = null;
-    // if (searchResponse.results && searchResponse.results.length > 0) {
-    //     contactId = searchResponse.results[0].id;
-    //     await hubspotClient.crm.companies.basicApi.update(contactId,  properties);
-    // } else {
-    //     const createResponse = await hubspotClient.crm.companies.basicApi.create({properties: properties});
-    //     contactId = createResponse.id;
-    // }
+    let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
 
-    // return contactId;
+    // Si se encuentra el contacto, lo actualiza; si no, crea uno nuevo
+    if (contactId) {
+      await hubspotClient.crm.companies.basicApi.update(contactId, properties);
+    } else {
+      const createResponse = await hubspotClient.crm.companies.basicApi.create({ properties: properties });
+      contactId = createResponse.id;
+      console.log("contactId:", contactId);
+    }
+  
+    return contactId;
 }
 
 // Ejecutar la migración al iniciar el servidor
