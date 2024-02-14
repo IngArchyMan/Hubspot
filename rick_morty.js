@@ -162,11 +162,11 @@ async function associateContactWithCompany(contactId, companyId) {
     const BatchInputPublicAssociation = {
         inputs: [
             {
-                from: {
-                    id: contactId.toString()
+                _from: {
+                    id: contactId
                 },
                 to: {
-                    id: companyId.toString()
+                    id: companyId
                 },
                 type: 'contact_to_company'
             }
