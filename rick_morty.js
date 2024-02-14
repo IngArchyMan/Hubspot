@@ -158,20 +158,20 @@ async function associateContactWithCompany(contactId, companyId) {
         return; 
     }
 
-
-    const BatchInputPublicAssociation = {
-        inputs: [
-            {
-                _from: {
-                    id: contactId
-                },
-                to: {
-                    id: companyId
-                },
-                type: 'contact_to_company'
-            }
-        ]
-    };
+    const BatchInputPublictAssociation = { inputs: [{"_from":{"id":contactId.toString()},"to":{"id":companyId.toString()}}] };
+    // const BatchInputPublicAssociation = {
+    //     inputs: [
+    //         {
+    //             _from: {
+    //                 id: contactId
+    //             },
+    //             to: {
+    //                 id: companyId
+    //             },
+    //             type: 'contact_to_company'
+    //         }
+    //     ]
+    // };
     console.log("BatchInputPublicAssociation", BatchInputPublicAssociation);
     // const response = await hubspotClient.crm.associations.batchApi.create(
     //     'contact',
