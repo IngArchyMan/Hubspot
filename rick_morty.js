@@ -30,7 +30,7 @@ async function migrateCharactersAndLocations() {
 		
         // Filtrar personajes con ID primo y migrarlos a HubSpot
         for (const character of characters) {
-			console.log("character.name:", character.name);
+			//console.log("character.name:", character.name);
             let contactProperties;
             let contactId;
             let companyId;
@@ -45,11 +45,11 @@ async function migrateCharactersAndLocations() {
 					character_species :character.species,
 					};
                     
-                    console.log("contactProperties:", contactProperties.character_id);
+                    //console.log("contactProperties:", contactProperties.character_id);
                     contactId = await upsertContact(contactProperties.character_id,contactProperties);
-                    console.log("contactId", contactId);
+                    //console.log("contactId", contactId);
                     const locationUrl = character.location.url;
-                    console.log("locationUrl:", locationUrl);
+                    //console.log("locationUrl:", locationUrl);
                     let companyProperties;
                     if (locationUrl) {
                         const locationResponse = await axios.get(locationUrl);
@@ -63,13 +63,13 @@ async function migrateCharactersAndLocations() {
                             location_type:location.type		
                         };
 
-                        console.log("companyProperties:", companyProperties.location_id);
+                        //console.log("companyProperties:", companyProperties.location_id);
                         // Crear o actualizar la empresa en HubSpot
                         companyId = await upsertCompany(companyProperties.location_id,companyProperties);
-                        console.log("companyId", companyId);
+                        //console.log("companyId", companyId);
                         //Asociar el contacto con la empresa en HubSpot
                         const response= await associateContactWithCompany(contactId, companyId);
-                    console.log("respuesta final ", response)
+                    //console.log("respuesta final ", response)
                    }
 				};
             }
@@ -80,9 +80,9 @@ async function migrateCharactersAndLocations() {
 }
 
 async function upsertContact(characterId, properties) {
-  console.log("upsertContact:")
-  console.log("characterId:", characterId)
-  console.log("properties:", properties);
+  //console.log("upsertContact:")
+  //console.log("characterId:", characterId)
+  //console.log("properties:", properties);
   if(characterId != null && properties != ''){
   const searchRequest = {
     filterGroups: [{
@@ -95,10 +95,10 @@ async function upsertContact(characterId, properties) {
     properties: ['character_id']
   };
   
-  console.log("searchRequest:", searchRequest);
+  //console.log("searchRequest:", searchRequest);
   
    const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch(searchRequest);
-   console.log("earchResponse:", searchResponse);
+   //console.log("earchResponse:", searchResponse);
   //Verifica si se encontró algún resultado y obtiene el ID del contacto
   let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
 
@@ -109,7 +109,7 @@ async function upsertContact(characterId, properties) {
     const createResponse = await hubspotClient.crm.contacts.basicApi.create({ properties: properties});
     contactId = createResponse.id;
     }
-    console.log("contactId de la funcion", contactId);
+    //console.log("contactId de la funcion", contactId);
   
   return contactId;
 }
@@ -118,7 +118,7 @@ async function upsertContact(characterId, properties) {
 
 
 async function upsertCompany(location_id, properties) {
-    console.log("properties upsertCompanylocation_id:", location_id);
+    //console.log("properties upsertCompanylocation_id:", location_id);
     if(location_id != null && properties != ''){
      const searchRequest = {
         filterGroups: [{
@@ -130,11 +130,11 @@ async function upsertCompany(location_id, properties) {
         }],
         properties:['location_id']
       };
-      console.log("searchRequest:", searchRequest);
+      //console.log("searchRequest:", searchRequest);
   
     const searchResponse = await hubspotClient.crm.companies.searchApi.doSearch(searchRequest);  
     // Realizar la búsqueda del contacto en HubSpot usando el location_id
-    console.log("earchResponse:", searchResponse);
+    //console.log("earchResponse:", searchResponse);
     let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
 
     // Si se encuentra el contacto, lo actualiza; si no, crea uno nuevo
@@ -150,9 +150,7 @@ async function upsertCompany(location_id, properties) {
 }
 }
 async function associateContactWithCompany(contactId, companyId) {
-    console.log("associateContactWithCompany");
-    console.log("properties upsertCompanylocation_id:", contactId);
-    console.log("properties upsertCompanylocation_id:", companyId);
+
 
 
     if (!contactId || !companyId) { 
@@ -185,7 +183,7 @@ async function associateContactWithCompany(contactId, companyId) {
 
 // Ejecutar la migración al iniciar el servidor
 migrateCharactersAndLocations().then(() => {
-    console.log('Migración completada');
+    //console.log('Migración completada');
 }).catch(console.error);
 
 const { body, validationResult } = require('express-validator');
@@ -241,7 +239,7 @@ app.post('/create-or-update-company', [
 // Iniciar el servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    //console.log(`Server is running on port ${PORT}`);
 });
 
 
