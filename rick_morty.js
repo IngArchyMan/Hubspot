@@ -71,11 +71,6 @@ async function migrateCharactersAndLocations() {
                         //console.log(response)
                     }
 				};
-				
-				// Crear o actualizar el contacto en HubSpot
-				
-                // Obtener y migrar la ubicación asociada al personaje
- 
             }
         //}
      //catch (error) {
