@@ -174,10 +174,10 @@ migrateCharactersAndLocations().then(() => {
 
 // Endpoint para crear o actualizar un contacto
 app.post('/create-or-update-contact', async (req, res) => {
-    const { location_id, contactProperties } = req.body;
+    const { character_id, contactProperties } = req.body;
 
     try {
-        const contactId = await upsertContact(location_id,contactProperties);
+        const contactId = await upsertContact(character_id,contactProperties);
         res.json({ success: true, message: 'Contact updated successfully', contactId });
     } catch (error) {
         console.error('Error in create-or-update-contact endpoint:', error);
@@ -187,10 +187,10 @@ app.post('/create-or-update-contact', async (req, res) => {
 
 // Endpoint para crear o actualizar una ubicación (company)
 app.post('/create-or-update-company', async (req, res) => {
-    const { companyProperties } = req.body;
+const { location_id, companyProperties } = req.body;
 
     try {
-        const companyId = await upsertCompany(companyProperties);
+        const companyId = await upsertCompany(location_id, companyProperties);
         res.json({ success: true, message: 'Location updated successfully', companyId });
     } catch (error) {
         console.error('Error in create-or-update-location endpoint:', error);
