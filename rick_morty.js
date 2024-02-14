@@ -149,6 +149,9 @@ async function upsertCompany(location_id, properties) {
 }
 }
 async function associateContactWithCompany(contactId, companyId) {
+    console.log("associateContactWithCompany")
+    console.log("associateContactWithCompany")
+    console.log("associateContactWithCompany")
     console.log("properties upsertCompanylocation_id:", contactId);
     console.log("properties upsertCompanylocation_id:", companyId);
     // const BatchInputPublicAssociation = {
