@@ -187,10 +187,10 @@ app.post('/create-or-update-contact', async (req, res) => {
 
 // Endpoint para crear o actualizar una ubicación (company)
 app.post('/create-or-update-company', async (req, res) => {
-const { location_id, companyProperties } = req.body;
+const { companyProperties } = req.body;
 
     try {
-        const companyId = await upsertCompany(location_id, companyProperties);
+        const companyId = await upsertCompany(companyProperties);
         res.json({ success: true, message: 'Location updated successfully', companyId });
     } catch (error) {
         console.error('Error in create-or-update-location endpoint:', error);
