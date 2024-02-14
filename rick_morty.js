@@ -35,17 +35,17 @@ async function migrateCharactersAndLocations() {
             let companyProperties;
             if (isPrime(character.id) || character.name === "Rick Sanchez") { // Incluir a Rick Sanchez con ID 1
                 
-                //  contactProperties = {
-                //     firstname: character.name.split(' ')[0],
-                //     lastname: character.name.split(' ').slice(1).join(' ') || character.name,
-				// 	character_id: character.id,
-                //     character_gender: character.gender,
-                //     status_character: character.status,
-				// 	character_species :character.species,
-				// 	};
+                 contactProperties = {
+                    firstname: character.name.split(' ')[0],
+                    lastname: character.name.split(' ').slice(1).join(' ') || character.name,
+					character_id: character.id,
+                    character_gender: character.gender,
+                    status_character: character.status,
+					character_species :character.species,
+					};
                     
-                //     console.log("contactProperties:", character.id);
-                //     const contactId = await upsertContact(character.id,contactProperties);
+                    console.log("contactProperties:", character.id);
+                    const contactId = await upsertContact(character.id,contactProperties);
                     const locationUrl = character.location.url;
                     console.log("locationUrl:", locationUrl);
                     if (locationUrl) {
