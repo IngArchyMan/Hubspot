@@ -35,17 +35,17 @@ async function migrateCharactersAndLocations() {
             let companyProperties;
             if (isPrime(character.id) || character.name === "Rick Sanchez") { // Incluir a Rick Sanchez con ID 1
                 
-                 contactProperties = {
-                    firstname: character.name.split(' ')[0],
-                    lastname: character.name.split(' ').slice(1).join(' ') || character.name,
-					character_id: character.id,
-                    character_gender: character.gender,
-                    status_character: character.status,
-					character_species :character.species,
-					};
+                //  contactProperties = {
+                //     firstname: character.name.split(' ')[0],
+                //     lastname: character.name.split(' ').slice(1).join(' ') || character.name,
+				// 	character_id: character.id,
+                //     character_gender: character.gender,
+                //     status_character: character.status,
+				// 	character_species :character.species,
+				// 	};
                     
-                    console.log("contactProperties:", character.id);
-                    const contactId = await upsertContact(character.id,contactProperties);
+                //     console.log("contactProperties:", character.id);
+                //     const contactId = await upsertContact(character.id,contactProperties);
                     const locationUrl = character.location.url;
                     console.log("locationUrl:", locationUrl);
                     if (locationUrl) {
@@ -134,19 +134,19 @@ async function upsertCompany(properties) {
       };
       console.log("searchRequest:", searchRequest);
   
-    const searchResponse = await hubspotClient.crm.companies.searchApi.doSearch(searchRequest);  
-    // Realizar la búsqueda del contacto en HubSpot usando el location_id
-    console.log("earchResponse:", searchResponse);
+    // const searchResponse = await hubspotClient.crm.companies.searchApi.doSearch(searchRequest);  
+    // // Realizar la búsqueda del contacto en HubSpot usando el location_id
+    // console.log("earchResponse:", searchResponse);
  
-    if (searchResponse.results && searchResponse.results.length > 0) {
-        contactId = searchResponse.results[0].id;
-        await hubspotClient.crm.companies.basicApi.update(contactId,  properties);
-    } else {
-        const createResponse = await hubspotClient.crm.companies.basicApi.create({properties: properties});
-        contactId = createResponse.id;
-    }
+    // if (searchResponse.results && searchResponse.results.length > 0) {
+    //     contactId = searchResponse.results[0].id;
+    //     await hubspotClient.crm.companies.basicApi.update(contactId,  properties);
+    // } else {
+    //     const createResponse = await hubspotClient.crm.companies.basicApi.create({properties: properties});
+    //     contactId = createResponse.id;
+    // }
 
-    return contactId;
+    // return contactId;
 }
 
 // Ejecutar la migración al iniciar el servidor
