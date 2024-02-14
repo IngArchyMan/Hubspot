@@ -32,7 +32,8 @@ async function migrateCharactersAndLocations() {
         for (const character of characters) {
 			console.log("character.name:", character.name);
             let contactProperties;
-            
+            let contactId;
+            let companyId;
             if (character && (isPrime(character.id) || character.name === "Rick Sanchez")) { // Incluir a Rick Sanchez con ID 1
                 
                  contactProperties = {
@@ -45,7 +46,7 @@ async function migrateCharactersAndLocations() {
 					};
                     
                     console.log("contactProperties:", contactProperties.character_id);
-                    const contactId = await upsertContact(contactProperties.character_id,contactProperties);
+                    contactId = await upsertContact(contactProperties.character_id,contactProperties);
                     const locationUrl = character.location.url;
                     console.log("locationUrl:", locationUrl);
                     let companyProperties;
@@ -63,10 +64,10 @@ async function migrateCharactersAndLocations() {
 
                         console.log("companyProperties:", companyProperties.location_id);
                         // Crear o actualizar la empresa en HubSpot
-                        const companyId = await upsertCompany(companyProperties.location_id,companyProperties);
+                        companyId = await upsertCompany(companyProperties.location_id,companyProperties);
                         // Asociar el contacto con la empresa en HubSpot
                         const response= await associateContactWithCompany(contactId, companyId);
-                        console.log("respuesta final ",response)
+                    console.log("respuesta final ", response)
                     }
 				};
             }
