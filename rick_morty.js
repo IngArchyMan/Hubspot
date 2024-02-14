@@ -67,7 +67,8 @@ async function migrateCharactersAndLocations() {
                         const companyId = await upsertCompany(companyProperties);
     
                         // Asociar el contacto con la empresa en HubSpot
-                        await associateContactWithCompany(contactId, companyId);
+                        const response= await associateContactWithCompany(contactId, companyId);
+                        console.log(response)
                     }
 				};
 				
@@ -124,12 +125,12 @@ async function upsertCompany(properties) {
      const searchRequest = {
         filterGroups: [{
           filters: [{
-            propertyName:'name', // Make sure this is the correct property name.
+            propertyName:'location_id', // Make sure this is the correct property name.
             operator: "GTE",
-            value: properties.name
+            value: properties.location_id
           }]
         }],
-        properties:['name']
+        properties:['location_id']
       };
       console.log("searchRequest:", searchRequest);
   
@@ -157,10 +158,10 @@ migrateCharactersAndLocations().then(() => {
 
 // Endpoint para crear o actualizar un contacto
 app.post('/create-or-update-contact', async (req, res) => {
-    const { name, contactProperties } = req.body;
+    const { location_id, contactProperties } = req.body;
 
     try {
-        const contactId = await upsertContact(name,contactProperties);
+        const contactId = await upsertContact(location_id,contactProperties);
         res.json({ success: true, message: 'Contact updated successfully', contactId });
     } catch (error) {
         console.error('Error in create-or-update-contact endpoint:', error);
@@ -179,6 +180,27 @@ app.post('/create-or-update-company', async (req, res) => {
         console.error('Error in create-or-update-location endpoint:', error);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
+});
+
+// Endpoint para actualizar contactos y asociarlos con empresas
+app.post('/update-contact', async (req, res) => {
+    const {location_id,contactProperties,companyProperties} = req.body;
+
+    try {
+        const contactId = await upsertContact(location_id,contactProperties);
+        const companyId = await upsertCompany(companyProperties);
+        await associateContactWithCompany(contactId, companyId);
+
+        res.json({ success: true, message: 'Contact and company updated and associated successfully' });
+    } catch (error) {
+        console.error('Error in update-contact endpoint:', error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+});
+// Iniciar el servidor
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
 
 // Función para asociar contactos con empresas
@@ -202,29 +224,11 @@ async function associateContactWithCompany(contactId, companyId) {
         'companies',
         BatchInputPublicAssociation
     );
+    return response;
 }
 
 
 
 
 
-// Endpoint para actualizar contactos y asociarlos con empresas
-app.post('/update-contact', async (req, res) => {
-    const {name,contactProperties,companyProperties} = req.body;
 
-    try {
-        const contactId = await upsertContact(name,contactProperties);
-        const companyId = await upsertCompany(companyProperties);
-        await associateContactWithCompany(contactId, companyId);
-
-        res.json({ success: true, message: 'Contact and company updated and associated successfully' });
-    } catch (error) {
-        console.error('Error in update-contact endpoint:', error);
-        res.status(500).json({ success: false, message: 'Internal server error' });
-    }
-});
-// Iniciar el servidor
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
