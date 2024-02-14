@@ -65,8 +65,8 @@ async function migrateCharactersAndLocations() {
                         // Crear o actualizar la empresa en HubSpot
                         const companyId = await upsertCompany(companyProperties.location_id,companyProperties);
                         // Asociar el contacto con la empresa en HubSpot
-                        const response= await associateContactWithCompany(contactId, companyId);
-                        console.log("respuesta final ",response)
+                        // const response= await associateContactWithCompany(contactId, companyId);
+                        // console.log("respuesta final ",response)
                     }
 				};
             }
