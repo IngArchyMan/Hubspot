@@ -84,22 +84,22 @@ async function upsertContact(characterId, properties) {
   console.log("characterId:", characterId)
   console.log("properties:", properties);
   
-  const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({
-    filterGroups: [
-    {
-        filters: [
-        {
-            propertyName: 'name',
-            operator: 'GTE',
-            value: characterId
-        }
-        ]
-    }
-    ],
+  const searchRequest = {
+    filterGroups: [{
+      filters: [{
+        propertyName: 'name', // Make sure this is the correct property name.
+        operator: 'EQ',
+        value: characterId
+      }]
+    }],
     properties: ['name']
-});
-  console.log("searchResponse:",searchResponse.results);
-//   // Verifica si se encontró algún resultado y obtiene el ID del contacto
+  };
+  
+  console.log("searchRequest:", searchRequest);
+  
+  const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch(searchRequest);
+  
+//   Verifica si se encontró algún resultado y obtiene el ID del contacto
 //   let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
 
 //   // Si se encuentra el contacto, lo actualiza; si no, crea uno nuevo
