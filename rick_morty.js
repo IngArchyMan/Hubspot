@@ -149,6 +149,8 @@ async function upsertCompany(location_id, properties) {
 }
 }
 async function associateContactWithCompany(contactId, companyId) {
+    console.log("properties upsertCompanylocation_id:", contactId);
+    console.log("properties upsertCompanylocation_id:", companyId);
     const BatchInputPublicAssociation = {
         inputs: [
             {
@@ -163,12 +165,12 @@ async function associateContactWithCompany(contactId, companyId) {
         ]
     };
     
-    const response = await hubspotClient.crm.associations.batchApi.create(
-        'contact',
-        'companies',
-        BatchInputPublicAssociation
-    );
-    return response;
+    // const response = await hubspotClient.crm.associations.batchApi.create(
+    //     'contact',
+    //     'companies',
+    //     BatchInputPublicAssociation
+    // );
+    // return response;
 }
 
 // Ejecutar la migración al iniciar el servidor
