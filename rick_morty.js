@@ -35,16 +35,16 @@ async function migrateCharactersAndLocations() {
             
             if (isPrime(character.id) || character.name === "Rick Sanchez") { // Incluir a Rick Sanchez con ID 1
                 
-                 contactProperties = {
-                    firstname: character.name.split(' ')[0],
-                    lastname: character.name.split(' ').slice(1).join(' ') || character.name,
-					character_id: character.id,
-                    character_gender: character.gender,
-                    status_character: character.status,
-					character_species :character.species,
-					};
+                //  contactProperties = {
+                //     firstname: character.name.split(' ')[0],
+                //     lastname: character.name.split(' ').slice(1).join(' ') || character.name,
+				// 	character_id: character.id,
+                //     character_gender: character.gender,
+                //     status_character: character.status,
+				// 	character_species :character.species,
+				// 	};
                     
-                    console.log("contactProperties:", contactProperties.character_id);
+                //     console.log("contactProperties:", contactProperties.character_id);
                     //const contactId = await upsertContact(contactProperties.character_id,contactProperties);
                     const locationUrl = character.location.url;
                     console.log("locationUrl:", locationUrl);
@@ -67,8 +67,8 @@ async function migrateCharactersAndLocations() {
                         //const companyId = await upsertCompany(companyProperties.location_id,companyProperties);
     
                         // Asociar el contacto con la empresa en HubSpot
-                        const response= await associateContactWithCompany(contactId, companyId);
-                        console.log(response)
+                        // const response= await associateContactWithCompany(contactId, companyId);
+                        // console.log(response)
                     }
 				};
             }
