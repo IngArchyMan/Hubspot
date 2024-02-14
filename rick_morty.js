@@ -44,8 +44,8 @@ async function migrateCharactersAndLocations() {
 					character_species :character.species,
 					};
                     
-                    console.log("contactProperties:", contactProperties.lastname);
-                    const contactId = await upsertContact(contactProperties.lastname,contactProperties);
+                    console.log("contactProperties:", contactProperties.firstname);
+                    const contactId = await upsertContact(contactProperties.firstname,contactProperties);
                     const locationUrl = character.location.url;
                     console.log("locationUrl:", locationUrl);
                     if (locationUrl) {
@@ -89,12 +89,12 @@ async function upsertContact(characterId, properties) {
   const searchRequest = {
     filterGroups: [{
       filters: [{
-        propertyName: 'lastname', // Make sure this is the correct property name.
+        propertyName: 'name', // Make sure this is the correct property name.
         operator: 'EQ',
         value: characterId
       }]
     }],
-    properties: ['lastname']
+    properties: ['name']
   };
   
   console.log("searchRequest:", searchRequest);
