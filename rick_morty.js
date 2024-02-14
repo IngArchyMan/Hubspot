@@ -125,12 +125,12 @@ async function upsertCompany(properties) {
     const searchRequest = {
         filterGroups: [{
           filters: [{
-            propertyName: 'location_id', // Make sure this is the correct property name.
+            propertyName: 'name', // Make sure this is the correct property name.
             operator: 'EQ',
-            value: properties.location_id
+            value: properties.name
           }]
         }],
-        properties: ['location_id']
+        properties: ['name']
       };
       console.log("searchRequest:", searchRequest);
   
