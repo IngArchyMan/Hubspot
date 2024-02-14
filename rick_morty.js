@@ -172,13 +172,13 @@ async function associateContactWithCompany(contactId, companyId) {
             }
         ]
     };
-    
-    const response = await hubspotClient.crm.associations.batchApi.create(
-        'contact',
-        'companies',
-        BatchInputPublicAssociation
-    );
-    return response;
+    console.log("BatchInputPublicAssociation", BatchInputPublicAssociation);
+    // const response = await hubspotClient.crm.associations.batchApi.create(
+    //     'contact',
+    //     'companies',
+    //     BatchInputPublicAssociation
+    // );
+    // return response;
 }
 
 // Ejecutar la migración al iniciar el servidor
