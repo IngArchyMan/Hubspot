@@ -52,9 +52,7 @@ async function migrateCharactersAndLocations() {
                     if (locationUrl) {
                         const locationResponse = await axios.get(locationUrl);
                         const location = locationResponse.data;
-                        
-    
-                        // Mapear datos de la ubicación a propiedades de empresa en HubSpot
+
                         companyProperties = {
                             name: location.name,
                             dimension:location.dimension,
@@ -62,10 +60,10 @@ async function migrateCharactersAndLocations() {
                             creation_date:location.created,
                             location_type:location.type		
                         };
+
                         console.log("companyProperties:", companyProperties.location_id);
                         // Crear o actualizar la empresa en HubSpot
                         const companyId = await upsertCompany(companyProperties.location_id,companyProperties);
-    
                         // Asociar el contacto con la empresa en HubSpot
                         const response= await associateContactWithCompany(contactId, companyId);
                         console.log("respuesta final ",response)
@@ -86,7 +84,7 @@ async function upsertContact(characterId, properties) {
   const searchRequest = {
     filterGroups: [{
       filters: [{
-        propertyName: 'character_id', // Make sure this is the correct property name.
+        propertyName: 'character_id', 
         operator: 'EQ',
         value: characterId
       }]
@@ -123,7 +121,7 @@ async function upsertCompany(location_id, properties) {
      const searchRequest = {
         filterGroups: [{
           filters: [{
-            propertyName:'location_id', // Make sure this is the correct property name.
+            propertyName:'location_id', 
             operator: 'EQ',
             value: location_id
           }]
