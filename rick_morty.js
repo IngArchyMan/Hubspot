@@ -80,7 +80,7 @@ async function upsertContact(characterId, properties) {
   console.log("upsertContact:")
   console.log("characterId:", characterId)
   console.log("properties:", properties);
-  if(characterId != null ){
+  if(characterId != null || characterId != ''){
   const searchRequest = {
     filterGroups: [{
       filters: [{
@@ -117,7 +117,7 @@ async function upsertContact(characterId, properties) {
 
 async function upsertCompany(location_id, properties) {
     console.log("properties upsertCompanylocation_id:", location_id);
-    if(location_id != null ){
+    if(location_id != null || location_id != ''){
      const searchRequest = {
         filterGroups: [{
           filters: [{
