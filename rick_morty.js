@@ -46,27 +46,27 @@ async function migrateCharactersAndLocations() {
 					};
                     
                     console.log("contactProperties:", contactProperties.character_id);
-                    contactId = await upsertContact(contactProperties.character_id,contactProperties);
-                    console.log("contactId", contactId);
-                    const locationUrl = character.location.url;
-                    console.log("locationUrl:", locationUrl);
-                    let companyProperties;
-                    if (locationUrl) {
-                        const locationResponse = await axios.get(locationUrl);
-                        const location = locationResponse.data;
+                    // contactId = await upsertContact(contactProperties.character_id,contactProperties);
+                    // console.log("contactId", contactId);
+                    // const locationUrl = character.location.url;
+                    // console.log("locationUrl:", locationUrl);
+                    // let companyProperties;
+                    // if (locationUrl) {
+                    //     const locationResponse = await axios.get(locationUrl);
+                    //     const location = locationResponse.data;
 
-                        companyProperties = {
-                            name: location.name,
-                            dimension:location.dimension,
-                            location_id: location.id,
-                            creation_date:location.created,
-                            location_type:location.type		
-                        };
+                    //     companyProperties = {
+                    //         name: location.name,
+                    //         dimension:location.dimension,
+                    //         location_id: location.id,
+                    //         creation_date:location.created,
+                    //         location_type:location.type		
+                    //     };
 
-                        console.log("companyProperties:", companyProperties.location_id);
-                        // Crear o actualizar la empresa en HubSpot
-                        companyId = await upsertCompany(companyProperties.location_id,companyProperties);
-                        console.log("companyId", companyId);
+                    //     console.log("companyProperties:", companyProperties.location_id);
+                    //     // Crear o actualizar la empresa en HubSpot
+                    //     companyId = await upsertCompany(companyProperties.location_id,companyProperties);
+                    //     console.log("companyId", companyId);
                         // Asociar el contacto con la empresa en HubSpot
                         //const response= await associateContactWithCompany(contactId, companyId);
                     //console.log("respuesta final ", response)
@@ -110,7 +110,7 @@ async function upsertContact(characterId, properties) {
     const createResponse = await hubspotClient.crm.contacts.basicApi.create({ properties: properties});
     contactId = createResponse.id;
     }
-  
+    console.log("contactId", contactId);
   
   return contactId;
 }
