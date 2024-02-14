@@ -45,6 +45,7 @@ async function migrateCharactersAndLocations() {
 					};
                     console.log("contactProperties:", contactProperties.lastname);
                     const contactId = await upsertContact(contactProperties.lastname,contactProperties);
+                    console.log("contactId:", contactId);
 				};
 				
 				// Crear o actualizar el contacto en HubSpot
@@ -101,16 +102,16 @@ async function upsertContact(characterId, properties) {
   
   //Verifica si se encontró algún resultado y obtiene el ID del contacto
   let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
-  console.log("searchRequest:", contactId);
-//   // Si se encuentra el contacto, lo actualiza; si no, crea uno nuevo
-//   if (contactId) {
-//     await hubspotClient.crm.contacts.basicApi.update(contactId, properties);
-//   } else {
-//     const createResponse = await hubspotClient.crm.contacts.basicApi.create({ properties: properties });
-//     contactId = createResponse.id;
-//   }
 
-//   return contactId;
+  // Si se encuentra el contacto, lo actualiza; si no, crea uno nuevo
+  if (contactId) {
+    await hubspotClient.crm.contacts.basicApi.update(contactId, properties);
+  } else {
+    const createResponse = await hubspotClient.crm.contacts.basicApi.create({ properties: properties });
+    contactId = createResponse.id;
+  }
+
+  return contactId;
 }
    
 
