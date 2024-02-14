@@ -151,19 +151,19 @@ async function upsertCompany(location_id, properties) {
 async function associateContactWithCompany(contactId, companyId) {
     console.log("properties upsertCompanylocation_id:", contactId);
     console.log("properties upsertCompanylocation_id:", companyId);
-    const BatchInputPublicAssociation = {
-        inputs: [
-            {
-                _from: {
-                    id : contactId
-                },
-                to: {
-                    id: companyId
-                },
-                type: 'contact_to_company'
-            }
-        ]
-    };
+    // const BatchInputPublicAssociation = {
+    //     inputs: [
+    //         {
+    //             _from: {
+    //                 id : contactId
+    //             },
+    //             to: {
+    //                 id: companyId
+    //             },
+    //             type: 'contact_to_company'
+    //         }
+    //     ]
+    // };
     
     // const response = await hubspotClient.crm.associations.batchApi.create(
     //     'contact',
