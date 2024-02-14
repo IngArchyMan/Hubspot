@@ -66,7 +66,7 @@ async function migrateCharactersAndLocations() {
                         const companyId = await upsertCompany(companyProperties);
     
                         // Asociar el contacto con la empresa en HubSpot
-                        //await associateContactWithCompany(contactId, companyId);
+                        await associateContactWithCompany(contactId, companyId);
                     }
 				};
 				
@@ -134,19 +134,19 @@ async function upsertCompany(properties) {
       };
       console.log("searchRequest:", searchRequest);
   
-    // const searchResponse = await hubspotClient.crm.companies.searchApi.doSearch(searchRequest);  
-    // // Realizar la búsqueda del contacto en HubSpot usando el location_id
-    // console.log("earchResponse:", searchResponse);
+    const searchResponse = await hubspotClient.crm.companies.searchApi.doSearch(searchRequest);  
+    // Realizar la búsqueda del contacto en HubSpot usando el location_id
+    console.log("earchResponse:", searchResponse);
  
-    // if (searchResponse.results && searchResponse.results.length > 0) {
-    //     contactId = searchResponse.results[0].id;
-    //     await hubspotClient.crm.companies.basicApi.update(contactId,  properties);
-    // } else {
-    //     const createResponse = await hubspotClient.crm.companies.basicApi.create({properties: properties});
-    //     contactId = createResponse.id;
-    // }
+    if (searchResponse.results && searchResponse.results.length > 0) {
+        contactId = searchResponse.results[0].id;
+        await hubspotClient.crm.companies.basicApi.update(contactId,  properties);
+    } else {
+        const createResponse = await hubspotClient.crm.companies.basicApi.create({properties: properties});
+        contactId = createResponse.id;
+    }
 
-    // return contactId;
+    return contactId;
 }
 
 // Ejecutar la migración al iniciar el servidor
