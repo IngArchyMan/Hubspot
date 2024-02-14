@@ -23,7 +23,7 @@ function isPrime(num) {
 // Función para consultar la API de Rick y Morty y migrar personajes y ubicaciones
 async function migrateCharactersAndLocations() {
      try {
-        // Obtener personajes de la API de Rick y Morty
+        //Obtener personajes de la API de Rick y Morty
 		
         const charactersResponse = await axios.get('https://rickandmortyapi.com/api/character');
         const characters = charactersResponse.data.results;
@@ -158,16 +158,16 @@ async function associateContactWithCompany(contactId, companyId) {
         return; 
     }
 
-    // const BatchInputPublicAssociation = { inputs: [{"_from":{"id":contactId.toString()},"to":{"id":companyId.toString()},type: 'contact_to_company'}] };
+    const BatchInputPublicAssociation = { inputs: [{"_from":{"id":contactId.toString()},"to":{"id":companyId.toString()},type: 'contact_to_company'}] };
 
-    // console.log("BatchInputPublicAssociation", BatchInputPublicAssociation);
+    console.log("BatchInputPublicAssociation", BatchInputPublicAssociation);
    
-    // const response = await hubspotClient.crm.associations.v4.batchApi.create(
+    const response = await hubspotClient.crm.associations.v4.batchApi.create(
 
-    //     'contacts',
-    //     'companies',
-    //     BatchInputPublicAssociation
-    // );
+        'contacts',
+        'companies',
+        BatchInputPublicAssociation
+    );
  
 }
 
