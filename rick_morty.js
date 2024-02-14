@@ -115,8 +115,8 @@ async function upsertContact(characterId, properties) {
    
 
 
-async function upsertCompany(location_id,properties) {
-    console.log("properties upsertCompany:", properties);
+async function upsertCompany(location_id, properties) {
+    console.log("properties upsertCompanylocation_id:", location_id);
      const searchRequest = {
         filterGroups: [{
           filters: [{
