@@ -169,7 +169,7 @@ async function associateContactWithCompany(contactId, companyId) {
 }
 // Ejecutar la migración al iniciar el servidor
 migrateCharactersAndLocations().then(() => {
-    console.log('Migración completada');
+    console.log('Migración completada :D');
 }).catch(console.error);
 
 // Endpoint para crear o actualizar un contacto
