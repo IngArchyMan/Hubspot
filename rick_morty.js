@@ -163,10 +163,10 @@ async function associateContactWithCompany(contactId, companyId) {
         inputs: [
             {
                 from: {
-                    id: contactId
+                    id: contactId.toString()
                 },
                 to: {
-                    id: companyId
+                    id: companyId.toString()
                 },
                 type: 'contact_to_company'
             }
