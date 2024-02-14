@@ -22,7 +22,7 @@ function isPrime(num) {
 }
 // Función para consultar la API de Rick y Morty y migrar personajes y ubicaciones
 async function migrateCharactersAndLocations() {
-     try {
+     //try {
         // Obtener personajes de la API de Rick y Morty
 		
         const charactersResponse = await axios.get('https://rickandmortyapi.com/api/character');
@@ -67,7 +67,7 @@ async function migrateCharactersAndLocations() {
                         const companyId = await upsertCompany(companyProperties);
     
                         // Asociar el contacto con la empresa en HubSpot
-                        //await associateContactWithCompany(contactId, companyId);
+                        await associateContactWithCompany(contactId, companyId);
                     }
 				};
 				
@@ -76,10 +76,10 @@ async function migrateCharactersAndLocations() {
                 // Obtener y migrar la ubicación asociada al personaje
  
             }
-        }
-     catch (error) {
-        console.error('Error al migrar personajes y ubicaciones:', error);
-    }
+        //}
+     //catch (error) {
+        //console.error('Error al migrar personajes y ubicaciones:', error);
+    //}
 }
 
 async function upsertContact(characterId, properties) {
@@ -183,10 +183,30 @@ app.post('/create-or-update-company', async (req, res) => {
 
 // Función para asociar contactos con empresas
 async function associateContactWithCompany(contactId, companyId) {
-    await hubspotClient.crm.associations.batchApi.create('contact', 'company', {
-        inputs: [{ from: { id: contactId }, to: { id: companyId }, type: "company_to_contact" }]
-    });
+    const BatchInputPublicAssociation = {
+        inputs: [
+            {
+                _from: {
+                    id : contactId
+                },
+                to: {
+                    id: companyId
+                },
+                type: 'contact_to_company'
+            }
+        ]
+    };
+    
+    const response = await hubspotClient.crm.associations.batchApi.create(
+        'contact',
+        'companies',
+        BatchInputPublicAssociation
+    );
 }
+
+
+
+
 
 // Endpoint para actualizar contactos y asociarlos con empresas
 app.post('/update-contact', async (req, res) => {
