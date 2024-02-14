@@ -43,8 +43,8 @@ async function migrateCharactersAndLocations() {
                     status_character: character.status,
 					character_species :character.species,
 					};
-                    console.log("contactProperties:", contactProperties.firstname);
-                    //const contactId = await upsertContact(character.name,contactProperties);
+                    console.log("contactProperties:", contactProperties.lastname);
+                    const contactId = await upsertContact(contactProperties.lastname,contactProperties);
 				};
 				
 				// Crear o actualizar el contacto en HubSpot
@@ -97,20 +97,20 @@ async function upsertContact(characterId, properties) {
   
   console.log("searchRequest:", searchRequest);
   
-  const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch(searchRequest);
+//   const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch(searchRequest);
   
-  //Verifica si se encontró algún resultado y obtiene el ID del contacto
-  let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
+//   //Verifica si se encontró algún resultado y obtiene el ID del contacto
+//   let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
 
-  // Si se encuentra el contacto, lo actualiza; si no, crea uno nuevo
-  if (contactId) {
-    await hubspotClient.crm.contacts.basicApi.update(contactId, properties);
-  } else {
-    const createResponse = await hubspotClient.crm.contacts.basicApi.create({ properties: properties });
-    contactId = createResponse.id;
-  }
+//   // Si se encuentra el contacto, lo actualiza; si no, crea uno nuevo
+//   if (contactId) {
+//     await hubspotClient.crm.contacts.basicApi.update(contactId, properties);
+//   } else {
+//     const createResponse = await hubspotClient.crm.contacts.basicApi.create({ properties: properties });
+//     contactId = createResponse.id;
+//   }
 
-  return contactId;
+//   return contactId;
 }
    
 
