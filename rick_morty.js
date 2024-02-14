@@ -45,7 +45,7 @@ async function migrateCharactersAndLocations() {
 					};
                     
                     console.log("contactProperties:", contactProperties.character_id);
-                    const contactId = await upsertContact(contactProperties.character_id,contactProperties);
+                    //const contactId = await upsertContact(contactProperties.character_id,contactProperties);
                     const locationUrl = character.location.url;
                     console.log("locationUrl:", locationUrl);
                     let companyProperties;
@@ -62,7 +62,7 @@ async function migrateCharactersAndLocations() {
                             creation_date:location.created,
                             location_type:location.type		
                         };
-                        console.log("companyProperties:", companyProperties);
+                        console.log("companyProperties:", companyProperties.location_id);
                         // Crear o actualizar la empresa en HubSpot
                         const companyId = await upsertCompany(companyProperties.location_id,companyProperties);
     
