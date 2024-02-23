@@ -181,8 +181,9 @@ const { body, validationResult } = require('express-validator');
 // Definir el endpoint con validaciones
 app.post('/create-or-update-contact', [
   body('character_id').isInt().withMessage('Character ID must be an integer'),
-  body('contactProperties.firstname').not().isEmpty().withMessage('First name is required'),
-  body('contactProperties.lastname').not().isEmpty().withMessage('Last name is required'),
+  body('character_id').not().isEmpty().withMessage('character_id is required'),
+  //body('contactProperties.firstname').not().isEmpty().withMessage('First name is required'),
+ // body('contactProperties.lastname').not().isEmpty().withMessage('Last name is required'),
   // Agrega más validaciones según sea necesario
 ], async (req, res) => {
   // Verificar errores de validación
@@ -205,7 +206,8 @@ app.post('/create-or-update-contact', [
 
 app.post('/create-or-update-company', [
     body('location_id').isInt().withMessage('Location ID must be an integer'),
-    body('companyProperties.name').not().isEmpty().withMessage('Company name is required'),
+    body('location_id').not().isEmpty().withMessage('location_id is required'),
+    //body('companyProperties.name').not().isEmpty().withMessage('Company name is required'),
     // Agrega más validaciones según sea necesario
   ], async (req, res) => {
     // Verificar errores de validación
@@ -219,7 +221,7 @@ app.post('/create-or-update-company', [
   
     try {
       const companyId = await upsertCompany(location_id, companyProperties);
-      res.json({ success: true, message: 'Location updated successfully', companyId });
+      res.json({ success: true, message: 'Company updated successfully', companyId });
     } catch (error) {
       console.error('Error in create-or-update-company endpoint:', error);
       res.status(500).json({ success: false, message: 'Internal server error' });
