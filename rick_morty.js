@@ -106,7 +106,9 @@ async function upsertContact(characterId, properties) {
   if (contactId) {
     await hubspotClient.crm.contacts.basicApi.update(contactId, properties);
   }else {
-    const createResponse = await hubspotClient.crm.contacts.basicApi.create({ properties: properties});
+    const createResponse = await hubspotClient.crm.contacts.basicApi.create({ 
+      properties: { ...properties, character_id }
+  });
     contactId = createResponse.id;
     }
     console.log("contactId de la funcion", contactId);
