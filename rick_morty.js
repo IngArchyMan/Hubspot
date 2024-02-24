@@ -114,7 +114,6 @@ async function upsertContact(characterId, properties) {
   return contactId;
 }
 }
-   
 
 
 async function upsertCompany(location_id, properties) {
