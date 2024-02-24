@@ -137,7 +137,7 @@ async function upsertCompany(location_id, properties) {
     
     let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
     console.log("contactId:", contactId);
-    // Si se encuentra el contacto, lo actualiza; si no, crea uno nuevo
+    // Si se encuentra el contacto, lo actualiza; si no, crea uno uevo
     if (contactId) {
       await hubspotClient.crm.companies.basicApi.update(contactId, properties);
     } else {
