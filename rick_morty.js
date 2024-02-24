@@ -79,43 +79,40 @@ async function migrateCharactersAndLocations() {
     }
 }
 
-async function upsertContact(character_id, properties) {
-  if (character_id && properties) { // Nos aseguramos de que tenemos datos
-
-      const searchRequest = {
-          filterGroups: [{
-              filters: [{
-                  propertyName: 'character_id',
-                  operator: 'EQ',
-                  value: character_id
-              }]
-          }],
-          properties: ['character_id']
-      };
-
-      const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch(searchRequest);
-
-      let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
-
-      // Si se encuentra el contacto, lo actualiza; si no, lo crea
-      if (contactId) {
-          try {
-              // Actualizamos las propiedades recibidas
-              await hubspotClient.crm.contacts.basicApi.update(contactId, ...properties);
-          } catch (error) {
-              console.error(`Error al actualizar el contacto:`, error);
-          }
-      } else {
-          try {
-              const createResponse = await hubspotClient.crm.contacts.basicApi.create({ ...properties, character_id });
-              contactId = createResponse.id;
-          } catch (error) {
-              console.error(`Error al crear el contacto:`, error);
-          }
-      }
-
-      return contactId;
-  }
+async function upsertContact(characterId, properties) {
+  console.log("upsertContact:")
+  console.log("characterId:", characterId)
+  console.log("properties:", properties);
+  if(characterId != null && properties != ''){
+  const searchRequest = {
+    filterGroups: [{
+      filters: [{
+        propertyName: 'character_id', 
+        operator: 'EQ',
+        value: characterId
+      }]
+    }],
+    properties: ['character_id']
+  };
+  
+  console.log("searchRequest:", searchRequest);
+  
+   const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch(searchRequest);
+   
+  //Verifica si se encontró algún resultado y obtiene el ID del contacto
+  let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
+  console.log("contactId", contactId);
+  // Si se encuentra el contacto, lo actualiza; si no, crea uno nuevo
+  if (contactId) {
+    await hubspotClient.crm.contacts.basicApi.update(contactId, properties);
+  }else {
+    const createResponse = await hubspotClient.crm.contacts.basicApi.create({ properties: properties});
+    contactId = createResponse.id;
+    }
+    console.log("contactId de la funcion", contactId);
+  
+  return contactId;
+}
 }
    
 
@@ -251,3 +248,12 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
+
+
+
+
+
+
+
+
