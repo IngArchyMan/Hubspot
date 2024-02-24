@@ -98,10 +98,10 @@ async function upsertContact(characterId, properties) {
   console.log("searchRequest:", searchRequest);
   
    const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch(searchRequest);
-   console.log("earchResponse:", searchResponse);
+   
   //Verifica si se encontró algún resultado y obtiene el ID del contacto
   let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
-
+  console.log("contactId", contactId);
   // Si se encuentra el contacto, lo actualiza; si no, crea uno nuevo
   if (contactId) {
     await hubspotClient.crm.contacts.basicApi.update(contactId, properties);
@@ -134,9 +134,9 @@ async function upsertCompany(location_id, properties) {
   
     const searchResponse = await hubspotClient.crm.companies.searchApi.doSearch(searchRequest);  
     // Realizar la búsqueda del contacto en HubSpot usando el location_id
-    console.log("earchResponse:", searchResponse);
+    
     let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
-
+    console.log("contactId:", contactId);
     // Si se encuentra el contacto, lo actualiza; si no, crea uno nuevo
     if (contactId) {
       await hubspotClient.crm.companies.basicApi.update(contactId, properties);
@@ -193,10 +193,10 @@ app.post('/create-or-update-contact', [
   }
 
   // Procesar la solicitud si los datos son válidos
-  const { character_id, contactProperties } = req.body;
+  const { character_id, ...otherProperties } = req.body;
 
   try {
-    const contactId = await upsertContact(character_id, contactProperties);
+    const contactId = await upsertContact(character_id, otherProperties);
     res.json({ success: true, message: 'Contact updated successfully', contactId });
   } catch (error) {
     console.error('Error in create-or-update-contact endpoint:', error);
@@ -217,10 +217,10 @@ app.post('/create-or-update-company', [
     }
   
     // Procesar la solicitud si los datos son válidos
-    const { location_id, companyProperties } = req.body;
+    const { location_id,  ...otherProperties } = req.body;
   
     try {
-      const companyId = await upsertCompany(location_id, companyProperties);
+      const companyId = await upsertCompany(location_id, otherProperties);
       res.json({ success: true, message: 'Company updated successfully', companyId });
     } catch (error) {
       console.error('Error in create-or-update-company endpoint:', error);
