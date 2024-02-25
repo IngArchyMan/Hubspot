@@ -106,7 +106,7 @@ async function upsertContact(character_id, otherProperties) {
           // Creamos el contacto pasando todas las propiedades
           try {
               const createResponse = await hubspotClient.crm.contacts.basicApi.create({ 
-                properties: { otherProperties, character_id}});
+                properties: { otherProperties}});
               contactId = createResponse.id;
           } catch (error) {
               console.error(`Error al crear el contacto:`, error);
