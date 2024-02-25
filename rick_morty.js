@@ -7,7 +7,6 @@ const axios = require('axios');
 const app = express();
 app.use(bodyParser.json());
 
-
 app.get('/', (req, res) => {
   res.send('Bienvenido a la API de Rick y Morty en HubSpot');
 });	
