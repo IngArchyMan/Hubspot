@@ -79,45 +79,42 @@ async function migrateCharactersAndLocations() {
     }
 }
 
-async function upsertContact(character_id, otherProperties) {
-  if (character_id && otherProperties) { 
-      const searchRequest = {
-          filterGroups: [{
-              filters: [{
-                  propertyName: 'character_id',
-                  operator: 'EQ',
-                  value: character_id
-              }]
-          }],
-          properties: ['character_id']
-      };
-
-      const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch(searchRequest);
-      let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
-
-      if (contactId) {
-          // Actualizamos solamente las propiedades recibidas
-          try {
-              await hubspotClient.crm.contacts.basicApi.update(contactId, otherProperties);
-          } catch (error) {
-              console.error(`Error al actualizar el contacto:`, error);
-          }
-      } else {
-          // Creamos el contacto pasando todas las propiedades
-          try {
-              const createResponse = await hubspotClient.crm.contacts.basicApi.create({ 
-                properties: { otherProperties}});
-              contactId = createResponse.id;
-          } catch (error) {
-              console.error(`Error al crear el contacto:`, error);
-          }
-      }
-
-      return contactId; 
-  } else {
-      console.error('character_id y otherProperties son requeridos');
-      // Considera devolver un código de error adecuado o una respuesta que indique la falta de datos
-  }
+async function upsertContact(characterId, properties) {
+  console.log("upsertContact:")
+  console.log("characterId:", characterId)
+  console.log("properties:", properties);
+  if (characterId && properties) {
+  const searchRequest = {
+    filterGroups: [{
+      filters: [{
+        propertyName: 'character_id', 
+        operator: 'EQ',
+        value: characterId
+      }]
+    }],
+    properties: ['character_id']
+  };
+  
+  console.log("searchRequest:", searchRequest);
+  
+   const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch(searchRequest);
+   
+  //Verifica si se encontró algún resultado y obtiene el ID del contacto
+  let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
+  console.log("contactId", contactId);
+  // Si se encuentra el contacto, lo actualiza; si no, crea uno nuevo
+  if (contactId) {
+    await hubspotClient.crm.contacts.basicApi.update(contactId, properties);
+  }else {
+    const createResponse = await hubspotClient.crm.contacts.basicApi.create({ 
+      properties: properties
+  });
+    contactId = createResponse.id;
+    }
+    console.log("contactId de la funcion", contactId);
+  
+  return contactId;
+}
 }
 
 
