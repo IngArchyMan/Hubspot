@@ -240,8 +240,7 @@ app.post('/create-or-update-company', [
       res.status(500).json({ success: false, message: 'Internal server error' });
     }
   });
-  
-  
+    
 // Iniciar el servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
