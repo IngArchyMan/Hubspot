@@ -10,7 +10,8 @@ app.use(bodyParser.json());
 app.get('/', (req, res) => {
   res.send('Bienvenido a la API de Rick y Morty en HubSpot');
 });	
-const hubspotClient = new hubspot.Client({ accessToken: process.env.HUBSPOT_ACCESS_TOKEN });
+const hubspotSource = new hubspot.Client({ accessToken: process.env.HUBSPOT_ACCESS_SOURCE});
+const hubspotMirror= new hubspot.Client({ accessToken: process.env.HUBSPOT_ACCESS_MIRROR});
 
 // Función auxiliar para verificar si un número es primo
 function isPrime(num) {
@@ -45,7 +46,7 @@ async function migrateCharactersAndLocations() {
 					};
                     
                     console.log("contactProperties:", contactProperties.character_id);
-                    contactId = await upsertContact(contactProperties.character_id,contactProperties);
+                    contactId = await upsertContact(contactProperties.character_id,contactProperties,hubspotSource);
                     console.log("contactId", contactId);
                     const locationUrl = character.location.url;
                     console.log("locationUrl:", locationUrl);
@@ -64,7 +65,7 @@ async function migrateCharactersAndLocations() {
 
                         console.log("companyProperties:", companyProperties.location_id);
                         // Crear o actualizar la empresa en HubSpot
-                        companyId = await upsertCompany(companyProperties.location_id,companyProperties);
+                        companyId = await upsertCompany(companyProperties.location_id,companyProperties,hubspotSource);
                         console.log("companyId", companyId);
                         //Asociar el contacto con la empresa en HubSpot
                         const response= await associateContactWithCompany(contactId, companyId);
@@ -78,7 +79,7 @@ async function migrateCharactersAndLocations() {
     }
 }
 
-async function upsertContact(characterId, properties) {
+async function upsertContact(characterId, properties, hubspotClient) {
   console.log("upsertContact:")
   console.log("characterId:", characterId)
   console.log("properties:", properties);
@@ -117,7 +118,7 @@ async function upsertContact(characterId, properties) {
 }
 
 
-async function upsertCompany(location_id, properties) {
+async function upsertCompany(location_id, properties,hubspotClient) {
   console.log("properties upsertCompanylocation_id:", location_id);
   if (location_id && properties) { // Nos aseguramos de que tengamos datos
 
@@ -197,8 +198,6 @@ const { body, validationResult } = require('express-validator');
 app.post('/create-or-update-contact', [
   body('character_id').isInt().withMessage('Character ID must be an integer'),
   body('character_id').not().isEmpty().withMessage('character_id is required'),
-  //body('contactProperties.firstname').not().isEmpty().withMessage('First name is required'),
- // body('contactProperties.lastname').not().isEmpty().withMessage('Last name is required'),
   // Agrega más validaciones según sea necesario
 ], async (req, res) => {
   // Verificar errores de validación
@@ -211,7 +210,7 @@ app.post('/create-or-update-contact', [
   const { character_id, ...otherProperties } = req.body;
 
   try {
-    const contactId = await upsertContact(character_id, otherProperties);
+    const contactId = await upsertContact(character_id, otherProperties,hubspotMirror);
     res.json({ success: true, message: 'Contact updated successfully', contactId });
   } catch (error) {
     console.error('Error in create-or-update-contact endpoint:', error);
@@ -222,7 +221,6 @@ app.post('/create-or-update-contact', [
 app.post('/create-or-update-company', [
     body('location_id').isInt().withMessage('Location ID must be an integer'),
     body('location_id').not().isEmpty().withMessage('location_id is required'),
-    //body('companyProperties.name').not().isEmpty().withMessage('Company name is required'),
     // Agrega más validaciones según sea necesario
   ], async (req, res) => {
     // Verificar errores de validación
@@ -235,7 +233,7 @@ app.post('/create-or-update-company', [
     const { location_id,  ...otherProperties } = req.body;
   
     try {
-      const companyId = await upsertCompany(location_id, otherProperties);
+      const companyId = await upsertCompany(location_id, otherProperties,hubspotMirror);
       res.json({ success: true, message: 'Company updated successfully', companyId });
     } catch (error) {
       console.error('Error in create-or-update-company endpoint:', error);
