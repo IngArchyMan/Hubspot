@@ -240,7 +240,7 @@ app.post('/create-or-update-company', [
       res.status(500).json({ success: false, message: 'Internal server error' });
     }
   });
-const response= associateContactWithCompany(contactId, companyId,hubspotMirror);  
+  
   
 // Iniciar el servidor
 const PORT = process.env.PORT || 3000;
