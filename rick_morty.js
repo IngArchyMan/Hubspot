@@ -68,7 +68,7 @@ async function migrateCharactersAndLocations() {
                         companyId = await upsertCompany(companyProperties.location_id,companyProperties,hubspotSource);
                         console.log("companyId", companyId);
                         //Asociar el contacto con la empresa en HubSpot
-                        const response= await associateContactWithCompany(contactId, companyId);
+                        const response= await associateContactWithCompany(contactId, companyId,hubspotSource);
                     console.log("respuesta final ", response)
                    }
 				};
@@ -165,7 +165,7 @@ async function upsertCompany(location_id, properties,hubspotClient) {
       return contactId; // Devolvemos el ID de la compañía
   }
 }
-async function associateContactWithCompany(contactId, companyId) {
+async function associateContactWithCompany(contactId, companyId,hubspotClient) {
 
     console.log("contactId", contactId);
     console.log("companyId", companyId);
@@ -240,6 +240,7 @@ app.post('/create-or-update-company', [
       res.status(500).json({ success: false, message: 'Internal server error' });
     }
   });
+const response= await associateContactWithCompany(contactId, companyId,hubspotMirror);  
   
 // Iniciar el servidor
 const PORT = process.env.PORT || 3000;
