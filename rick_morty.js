@@ -125,9 +125,6 @@ async function upsertContact(characterId, properties, hubspotClient) {
     try {
            // Actualizar solo las propiedades recibidas (excluyendo la que podría ser 'character_id')
       const propertiesToUpdate = { ...properties }; // Clona el objeto properties
-      if (propertiesToUpdate.character_id) {
-        delete propertiesToUpdate.character_id; 
-      }
       const SimplePublicObjectInput = { properties };
       // Solo actualizar si hay propiedades a cambiar:
       if (Object.keys(propertiesToUpdate).length > 0) {
@@ -207,9 +204,6 @@ async function upsertCompany(locationId, properties, hubspotClient) {
     try {
       // Actualizar solo las propiedades recibidas (excluyendo la que podría ser 'location_id')
       const propertiesToUpdate = { ...properties }; // Clona el objeto properties
-      if (propertiesToUpdate.location_id) {
-        delete propertiesToUpdate.location_id; 
-      }
       const SimplePublicObjectInput = { properties };
       // Solo actualizar si hay propiedades a cambiar:
       if (Object.keys(propertiesToUpdate).length > 0) {
