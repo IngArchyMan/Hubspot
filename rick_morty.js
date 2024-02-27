@@ -96,11 +96,7 @@ async function upsertContact(characterId, properties, hubspotClient) {
     return;
   }
 
-  // Verificar si la propiedad `character_id` está presente en las propiedades
-  if (!properties.hasOwnProperty('character_id')) {
-    console.error("Error: Falta la propiedad `character_id` en las propiedades del contacto.");
-    return;
-  }
+
 
   const searchRequest = {
     filterGroups: [{
@@ -167,11 +163,6 @@ async function upsertCompany(locationId, properties, hubspotClient) {
     return;
   }
 
-  // Verificar si la propiedad `location_id` está presente en las propiedades
-  if (!properties.hasOwnProperty('location_id')) {
-    console.error("Error: Falta la propiedad `location_id` en las propiedades de la empresa.");
-    return;
-  }
 
   const searchRequest = {
     filterGroups: [{
