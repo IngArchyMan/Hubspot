@@ -80,90 +80,141 @@ async function migrateCharactersAndLocations() {
 }
 
 async function upsertContact(characterId, properties, hubspotClient) {
-  console.log("upsertContact:")
-  console.log("characterId:", characterId)
+  console.log("upsertContact:");
+  console.log("characterId:", characterId);
   console.log("properties:", properties);
-  if (characterId && properties) {
+
+  // Verificar si se recibió el ID del personaje
+  if (!characterId) {
+    console.error("Error: Falta el ID del personaje (character_id).");
+    return;
+  }
+
+  // Verificar si se recibieron propiedades
+  if (!properties) {
+    console.error("Error: Se requieren propiedades para actualizar el contacto.");
+    return;
+  }
+
+  // Verificar si la propiedad `character_id` está presente en las propiedades
+  if (!properties.hasOwnProperty('character_id')) {
+    console.error("Error: Falta la propiedad `character_id` en las propiedades del contacto.");
+    return;
+  }
+
   const searchRequest = {
     filterGroups: [{
       filters: [{
-        propertyName: 'character_id', 
+        propertyName: 'character_id',
         operator: 'EQ',
         value: characterId
       }]
     }],
     properties: ['character_id']
   };
-  
+
   console.log("searchRequest:", searchRequest);
-  
-   const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch(searchRequest);
-   
-  //Verifica si se encontró algún resultado y obtiene el ID del contacto
+
+  const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch(searchRequest);
+
+																		  
   let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
   console.log("contactId", contactId);
-  // Si se encuentra el contacto, lo actualiza; si no, crea uno nuevo
+
   if (contactId) {
-    await hubspotClient.crm.contacts.basicApi.update(contactId, properties);
-  }else {
-    const createResponse = await hubspotClient.crm.contacts.basicApi.create({ 
-      properties: properties
-  });
-    contactId = createResponse.id;
+    try {
+      // Actualizar solo las propiedades recibidas
+      await hubspotClient.crm.contacts.basicApi.update(contactId, properties);
+    } catch (error) {
+      console.error(`Error al actualizar el contacto:`, error);
+      // Considera si necesitas relanzar el error o devolver un valor diferente
+	 
+								  
     }
-    console.log("contactId de la funcion", contactId);
-  
+  } else {
+    try {
+      // Añadir la propiedad `location_id` que es obligatoria
+      const createResponse = await hubspotClient.crm.contacts.basicApi.create({
+        properties: { ...properties }
+      });
+      contactId = createResponse.id;
+    } catch (error) {
+      console.error(`Error al crear el contacto:`, error);
+      // Considera si necesitas relanzar el error o devolver un valor diferente
+    }
+  }
+
+  console.log("contactId de la funcion", contactId);
+
   return contactId;
 }
-}
 
 
-async function upsertCompany(location_id, properties,hubspotClient) {
-  console.log("properties upsertCompanylocation_id:", location_id);
-  if (location_id && properties) { // Nos aseguramos de que tengamos datos
+async function upsertCompany(locationId, properties, hubspotClient) {
+  console.log("upsertCompany:");
+  console.log("locationId:", locationId);
+  console.log("properties:", properties);
 
-      const searchRequest = {
-          filterGroups: [{
-              filters: [{
-                  propertyName: 'location_id',
-                  operator: 'EQ',
-                  value: location_id
-              }]
-          }],
-          properties: ['location_id']
-      };
-      console.log("searchRequest:", searchRequest);
-
-      const searchResponse = await hubspotClient.crm.companies.searchApi.doSearch(searchRequest);
-      console.log("searchResponse", searchResponse);
-
-      let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
-      console.log("contactId:", contactId);
-
-      // Si se encuentra la compañía, la actualiza; si no, la crea 
-      if (contactId) {
-          try {
-              // Actualizamos solamente las propiedades recibidas
-              await hubspotClient.crm.companies.basicApi.update(contactId, properties);
-          } catch (error) {
-              console.error(`Error al actualizar la compañía:`, error);
-              // Considera si necesitas relanzar el error o devolver un valor diferente
-          }
-      } else {
-          try {
-              // Añadimos la propiedad location_id que es obligatoria
-              const createResponse = await hubspotClient.crm.companies.basicApi.create({ 
-                  properties: { ...properties, location_id }
-              });
-              contactId = createResponse.id;
-          } catch (error) {
-              console.error(`Error al crear la compañía:`, error);
-              // Considera si necesitas relanzar el error o devolver un valor diferente
-          }
-      }
-
-      return contactId; // Devolvemos el ID de la compañía
+  // Verificar si se recibió el ID de la ubicación
+  if (!locationId) {
+    console.error("Error: Falta el ID de la ubicación (location_id).");
+    return;
   }
+
+  // Verificar si se recibieron propiedades
+  if (!properties) {
+    console.error("Error: Se requieren propiedades para actualizar la empresa.");
+    return;
+  }
+
+  // Verificar si la propiedad `location_id` está presente en las propiedades
+  if (!properties.hasOwnProperty('location_id')) {
+    console.error("Error: Falta la propiedad `location_id` en las propiedades de la empresa.");
+    return;
+  }
+
+  const searchRequest = {
+    filterGroups: [{
+      filters: [{
+        propertyName: 'location_id',
+        operator: 'EQ',
+        value: locationId
+      }]
+    }],
+    properties: ['location_id']
+  };
+
+  console.log("searchRequest:", searchRequest);
+
+  const searchResponse = await hubspotClient.crm.companies.searchApi.doSearch(searchRequest);
+
+  let companyId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
+  console.log("companyId", companyId);
+
+  if (companyId) {
+    try {
+      // Actualizar solo las propiedades recibidas
+      await hubspotClient.crm.companies.basicApi.update(companyId, properties);
+    } catch (error) {
+      console.error(`Error al actualizar la empresa:`, error);
+      // Considera si necesitas relanzar el error o devolver un valor diferente
+    }
+  } else {
+    try {
+      // Añadir la propiedad `location_id` que es obligatoria
+      const createResponse = await hubspotClient.crm.companies.basicApi.create({
+        properties: { ...properties }
+      });
+      companyId = createResponse.id;
+    } catch (error) {
+      console.error(`Error al crear la empresa:`, error);
+      // Considera si necesitas relanzar el error o devolver un valor diferente
+    }
+  }
+
+  console.log("companyId de la funcion", companyId);
+
+  return companyId;
 }
 async function associateContactWithCompany(contactId, companyId,hubspotClient) {
 
@@ -240,8 +291,7 @@ app.post('/create-or-update-company', [
       res.status(500).json({ success: false, message: 'Internal server error' });
     }
   });
-  
-  
+    
 // Iniciar el servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
