@@ -119,7 +119,7 @@ async function upsertContact(characterId, properties, hubspotClient) {
 
 																		  
   let contactId = searchResponse.results && searchResponse.results.length > 0 ? searchResponse.results[0].id : null;
-  console.log("contactId", contactId);
+  
 
   if (contactId) {
     try {
@@ -128,10 +128,12 @@ async function upsertContact(characterId, properties, hubspotClient) {
       if (propertiesToUpdate.character_id) {
         delete propertiesToUpdate.character_id; 
       }
-      console.log("properties:", properties);
+      
       // Solo actualizar si hay propiedades a cambiar:
       if (Object.keys(propertiesToUpdate).length > 0) {
-      await hubspotClient.crm.contacts.basicApi.update(contactId, properties);
+        console.log("contactId", contactId);
+        console.log("properties:", properties);
+        await hubspotClient.crm.contacts.basicApi.update(contactId, properties);
 	      } else {
         console.warn("No se enviaron propiedades actualizables para el contacto, omitiendo actualización.")
       }		  
