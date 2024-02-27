@@ -82,7 +82,7 @@ async function migrateCharactersAndLocations() {
 async function upsertContact(characterId, properties, hubspotClient) {
   console.log("upsertContact:");
   console.log("characterId:", characterId);
-  console.log("properties:", properties);
+
 
   // Verificar si se recibió el ID del personaje
   if (!characterId) {
@@ -128,7 +128,7 @@ async function upsertContact(characterId, properties, hubspotClient) {
       if (propertiesToUpdate.character_id) {
         delete propertiesToUpdate.character_id; 
       }
-
+      console.log("properties:", properties);
       // Solo actualizar si hay propiedades a cambiar:
       if (Object.keys(propertiesToUpdate).length > 0) {
       await hubspotClient.crm.contacts.basicApi.update(contactId, properties);
