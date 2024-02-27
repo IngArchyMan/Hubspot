@@ -210,10 +210,10 @@ async function upsertCompany(locationId, properties, hubspotClient) {
       if (propertiesToUpdate.location_id) {
         delete propertiesToUpdate.location_id; 
       }
-
+      const SimplePublicObjectInput = { properties };
       // Solo actualizar si hay propiedades a cambiar:
       if (Object.keys(propertiesToUpdate).length > 0) {
-        await hubspotClient.crm.companies.basicApi.update(companyId, propertiesToUpdate);
+        await hubspotClient.crm.companies.basicApi.update(companyId, SimplePublicObjectInput);
       } else {
         console.warn("No se enviaron propiedades actualizables para la empresa, omitiendo actualización.")
       }
