@@ -96,7 +96,11 @@ async function upsertContact(characterId, properties, hubspotClient) {
     return;
   }
 
-
+  // Verificar si la propiedad `character_id` está presente en las propiedades
+  if (!properties.hasOwnProperty('character_id')) {
+    console.error("Error: Falta la propiedad `character_id` en las propiedades del contacto.");
+    return;
+  }
 
   const searchRequest = {
     filterGroups: [{
@@ -163,6 +167,11 @@ async function upsertCompany(locationId, properties, hubspotClient) {
     return;
   }
 
+  // Verificar si la propiedad `location_id` está presente en las propiedades
+  if (!properties.hasOwnProperty('location_id')) {
+    console.error("Error: Falta la propiedad `location_id` en las propiedades de la empresa.");
+    return;
+  }
 
   const searchRequest = {
     filterGroups: [{
@@ -245,43 +254,46 @@ app.post('/create-or-update-contact', [
   // Verificar errores de validación
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ success: false, errors: errors.array() });
+      return res.status(400).json({ success: false, errors: errors.array() });
   }
 
   // Procesar la solicitud si los datos son válidos
-  const { character_id, ...otherProperties } = req.body;
+  const allParameters = req.body; // Capturar todos los parámetros
+
+  // Mantén la lógica para extraer character_id de forma separada:
+  const { character_id, ...otherProperties } = allParameters;
 
   try {
-    const contactId = await upsertContact(character_id, otherProperties,hubspotMirror);
-    res.json({ success: true, message: 'Contact updated successfully', contactId });
+      const contactId = await upsertContact(character_id, allParameters, hubspotMirror);
+      res.json({ success: true, message: 'Contact updated successfully', contactId });
   } catch (error) {
-    console.error('Error in create-or-update-contact endpoint:', error);
-    res.status(500).json({ success: false, message: 'Internal server error' });
+      console.error('Error in create-or-update-contact endpoint:', error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
   }
 });
 
 app.post('/create-or-update-company', [
-    body('location_id').isInt().withMessage('Location ID must be an integer'),
-    body('location_id').not().isEmpty().withMessage('location_id is required'),
-    // Agrega más validaciones según sea necesario
-  ], async (req, res) => {
-    // Verificar errores de validación
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false, errors: errors.array() });
-    }
-  
-    // Procesar la solicitud si los datos son válidos
-    const { location_id,  ...otherProperties } = req.body;
-  
-    try {
-      const companyId = await upsertCompany(location_id, otherProperties,hubspotMirror);
-      res.json({ success: true, message: 'Company updated successfully', companyId });
-    } catch (error) {
-      console.error('Error in create-or-update-company endpoint:', error);
-      res.status(500).json({ success: false, message: 'Internal server error' });
-    }
-  });
+  body('location_id').isInt().withMessage('Location ID must be an integer'),
+  body('location_id').not().isEmpty().withMessage('location_id is required'),
+  // Agrega más validaciones según sea necesario
+], async (req, res) => {
+  // Verificar errores de validación
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ success: false, errors: errors.array() });
+  }
+const allParameters = req.body;
+  // Procesar la solicitud si los datos son válidos
+  const { location_id,  ...otherProperties } = allParameters;
+
+  try {
+    const companyId = await upsertCompany(location_id, allParameters,hubspotMirror);
+    res.json({ success: true, message: 'Company updated successfully', companyId });
+  } catch (error) {
+    console.error('Error in create-or-update-company endpoint:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});
     
 // Iniciar el servidor
 const PORT = process.env.PORT || 3000;
