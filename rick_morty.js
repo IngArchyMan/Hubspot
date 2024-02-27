@@ -123,8 +123,19 @@ async function upsertContact(characterId, properties, hubspotClient) {
 
   if (contactId) {
     try {
-      // Actualizar solo las propiedades recibidas
+           // Actualizar solo las propiedades recibidas (excluyendo la que podría ser 'character_id')
+      const propertiesToUpdate = { ...properties }; // Clona el objeto properties
+      if (propertiesToUpdate.character_id) {
+        delete propertiesToUpdate.character_id; 
+      }
+
+      // Solo actualizar si hay propiedades a cambiar:
+      if (Object.keys(propertiesToUpdate).length > 0) {
       await hubspotClient.crm.contacts.basicApi.update(contactId, properties);
+	      } else {
+        console.warn("No se enviaron propiedades actualizables para el contacto, omitiendo actualización.")
+      }		  
+
     } catch (error) {
       console.error(`Error al actualizar el contacto:`, error);
       // Considera si necesitas relanzar el error o devolver un valor diferente
@@ -133,7 +144,7 @@ async function upsertContact(characterId, properties, hubspotClient) {
     }
   } else {
     try {
-      // Añadir la propiedad `location_id` que es obligatoria
+      // Añadir la propiedad `character_id` que es obligatoria
       const createResponse = await hubspotClient.crm.contacts.basicApi.create({
         properties: { ...properties }
       });
@@ -148,7 +159,6 @@ async function upsertContact(characterId, properties, hubspotClient) {
 
   return contactId;
 }
-
 
 async function upsertCompany(locationId, properties, hubspotClient) {
   console.log("upsertCompany:");
@@ -193,15 +203,26 @@ async function upsertCompany(locationId, properties, hubspotClient) {
 
   if (companyId) {
     try {
-      // Actualizar solo las propiedades recibidas
-      await hubspotClient.crm.companies.basicApi.update(companyId, properties);
+      // Actualizar solo las propiedades recibidas (excluyendo la que podría ser 'location_id')
+      const propertiesToUpdate = { ...properties }; // Clona el objeto properties
+      if (propertiesToUpdate.location_id) {
+        delete propertiesToUpdate.location_id; 
+      }
+
+      // Solo actualizar si hay propiedades a cambiar:
+      if (Object.keys(propertiesToUpdate).length > 0) {
+        await hubspotClient.crm.companies.basicApi.update(companyId, propertiesToUpdate);
+      } else {
+        console.warn("No se enviaron propiedades actualizables para la empresa, omitiendo actualización.")
+      }
+
     } catch (error) {
       console.error(`Error al actualizar la empresa:`, error);
       // Considera si necesitas relanzar el error o devolver un valor diferente
     }
   } else {
     try {
-      // Añadir la propiedad `location_id` que es obligatoria
+      // Añadir la propiedad `location_id` ya que es obligatoria
       const createResponse = await hubspotClient.crm.companies.basicApi.create({
         properties: { ...properties }
       });
