@@ -6,6 +6,25 @@ Aplicación Rick y Morty para HubSpot con Heroku
 
 Estas instrucciones te permitirán obtener una copia del proyecto en funcionamiento en tu máquina local para propósitos de desarrollo y pruebas.
 
+###Descripción
+
+Esta aplicación permite la migración de personajes y ubicaciones de la serie Rick y Morty a HubSpot, creando contactos y empresas respectivamente, con criterios específicos.
+
+###Funcionalidades
+
+Migración automática de personajes y ubicaciones al iniciar el servidor.
+Creación o actualización de contactos en HubSpot con información de personajes.
+Creación o actualización de empresas (ubicaciones) en HubSpot.
+Asociación de contactos con empresas en HubSpot.
+Endpoints para la interacción manual con la aplicación.
+
+###Tecnologías
+
+Node.js
+Express
+Heroku
+HubSpot API
+
 ### Prerrequisitos
 
 Antes de comenzar, necesitarás lo siguiente:
@@ -23,7 +42,8 @@ Sigue estos pasos para instalar el proyecto:
 2. Instala las dependencias del proyecto:
 	npm install
 3. Configura las variables de entorno necesarias para el proyecto:
-	HUBSPOT_API_KEY=tu_api_key
+	HUBSPOT_ACCESS_SOURCE=tu_api_key
+	HUBSPOT_ACCESS_MIRROR=tu_api_key
 
 ## Despliegue en Heroku
 
